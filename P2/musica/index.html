@@ -2,12 +2,179 @@
 <!-- Ejemplo de página web -->
 <html lang="es">
     <head>
-        <title>Daft Punk</title>
+        <title>Daft Punk | Home</title>
         <meta charset="utf-8">
         <meta name="author" content="Fernando Talavera Mendoza">
         <meta name="keywords" content="tecnologías web, html, programación">
     </head>
     <body>
+        <header>
+            <img src="./imagenes/logo.jpg" width="100" heigh="100" alt="Logo"/>
+            <h1>Daft Punk</h1>
+            <img src="./imagenes/horizontal.jpg"  width="800" height="400" alt="Imagen horizontal"/>
+        </header>
 
+        <nav>
+            <ul>
+                <li>
+                    <a href="./index.html">Home</a>
+                </li>
+                <li>
+                    <a href="./bio.html">Biografía</a>
+                </li>
+                <li>
+                    <a href="./disco.html">Discografía</a>
+                </li>
+                <li>
+                    <a href="./film.html">Filmografía</a>
+                </li>
+                <li>
+                    <a href="./formulario.html">Tienda</a>
+                </li>
+            </ul>
+        </nav>
+
+        <main>
+            <article>
+                <h2>Home</h2>
+                
+                <section>
+                    <h2>El grupo</h2>
+                    <p>
+                        Daft Punk es un banda francesa (House) formada por Thomas Bangalter y Guy-Manuel De Homen Christo.
+                        <br> Famosos por sus cascos de robots futuristas y espectaculares conciertos en vivo, han lanzado varios
+                        <br> álbumnes pioneros e influyentes, así como el trabajo cinematográfico aclamado por la crítica.
+                        <br>
+                    </p>
+                </section>
+            </article>
+            
+
+            <article>
+                <img src="./imagenes/img1.jpg" width="300" height="200" alt="Giorgio y Daft Punk"/>
+                <img src="./imagenes/img2.jpg" width="300" height="200" alt="Cascos"/>
+
+                <h2>Algunos Éxitos</h2>
+                <ul>
+                    <li>Derezzed</li>
+                    <li>Harder, Better, Faster, Stronger</li>
+                    <li>Get Lucky</li>
+                    <li>One More Time</li>
+                    <li>Around The World</li>
+                </ul>
+            </article>
+            
+            <article>
+                <!-- Aniadir enlaces a los repectivos albumnes -->
+                <h2>Premios Grammy</h2>
+                <table border="1">
+                   <thead>
+                    <tr>
+                        <th>Año</th>
+                        <th>Trabajo Nominados</th>
+                        <th>Categoría</th>
+                        <th>Resultado</th>
+                    </tr>
+                   </thead>
+                   <tbody>
+                    <tr>
+                        <td>1998</td>
+                        <td>"Da Funk"</td>
+                        <td>Mejor Grabación de Dance</td>
+                        <td>Nominado</td>
+                    </tr>
+                    <tr>
+                        <td>1999</td>
+                        <td>"Around the world"</td>
+                        <td>Mejor Grabación de Dance</td>
+                        <td>Nominado</td>
+                    </tr>
+                    <tr>
+                        <td rowspan="2">2002</td>
+                        <td>"One More Time"</td>
+                        <td>Mejor Grabación de Dance</td>
+                        <td>Nominado</td>
+                    </tr>
+                    <tr>
+                        <td>"Short Circuit"</td>
+                        <td>Mejor Actuación Instrumental de Pop</td>
+                        <td>Nominado</td>
+                    </tr>
+                    <tr>
+                        <td>2006</td>
+                        <td><i>Human After All</i></td>
+                        <td>Mejor Álbum de Dance/Electrónica</td>
+                        <td>Nominado</td>
+                    </tr>
+                    <tr>
+                        <td rowspan="2">2009</td>
+                        <td>"Harder Better Faster Stronger (Alive 2007)"</td>
+                        <td>Mejor Grabación de Dance</td>
+                        <td>Ganador</td>
+                    </tr>
+                    <tr>
+                        <td><i>Alive 2007</i></td>
+                        <td>Mejor Álbum de Dance/Electrónica</td>
+                        <td>Ganador</td>
+                    </tr>
+                    <tr>
+                        <td>2012</td>
+                        <td><i>Tron: Legacy</i></td>
+                        <td>Mejor Banda Sonora para Medio Visual</td>
+                        <td>Nominado</td>
+                    </tr>
+                    <tr>
+                        <td rowspan="5">2014</td>
+                        <td rowspan="3"><i>Random Access Memories</i></td>
+                        <td>Álbum del Año</td>
+                        <td>Ganador</td>
+                    </tr>
+                    <tr>
+                        <td>Mejor Álbum de Dance/Electrónica</td>
+                        <td>Ganador</td>
+                    </tr>
+                    <tr>
+                        <td>Mejor Ingeniería de Álbum, No Clásica</td>
+                        <td>Ganador</td>
+                    </tr>
+                    <tr>
+                        <td rowspan="2">"Get Lucky (con Pharrell Williams y Nile Rodgers)"</td>
+                        <td>Mejor Interpretación Pop Dúo/Grupo</td>
+                        <td>Ganador</td>
+                    </tr>
+                    <tr>
+                        <td>Mejor Grabación del Año</td>
+                        <td>Ganador</td>
+                    </tr>
+                   </tbody>
+                </table>
+            </article>
+
+            <article>
+                <h2>Merchandise Oficial</h2>
+                <!-- Imagenes con la merchandising -->
+                <img src="./imagenes/poster.jpg" widht="200" height="300" alt="Poster"/>
+            </article>
+        </main>
+
+        <aside>
+            <h3>Albumes populares</h3>
+            <!-- Imagen de Random Access Memories Album y enlace de compra -->
+            <!-- Imagen de Alive 2007 Album y enlace de compra -->
+            <!-- Imagen de Discovery Album y enlace de compra -->
+        </aside>
+
+        <footer>
+            <small>
+                <p>Mapa del sitio</p>
+                <p>
+                    © 2018 Copyright respective owners including: Daft Punk, Virgin Records, EMI, Soma Records, 
+                    Columbia Records and Sony Music Entertaiment
+                </p>
+                <p>
+                    Website designed and built by Fernando Talavera
+                </p>
+            </small>
+        </footer>
     </body>
 </html>

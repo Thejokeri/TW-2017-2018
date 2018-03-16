@@ -39,6 +39,27 @@
         <article>
             <h2>Tienda</h2>
             
+            <!-- Añadir los albumes y el tipo de tarjeta y checkbox -->
+            <fieldset>
+                <legend>Dirección de facturación</legend>
+                <form action="./procesa.php" method="post"><br>
+                    Nombre: <br><input type="text" name="nombre"/><br>
+                    Apellidos: <br><input type="text" name="apellidos"/><br>
+                    Teléfono: <br><input type="number" name="tlf"/><br>
+                    Fecha de nacimiento: <br><input type="date" name="fecha"/><br>
+                    Calle: <br><input type="text" name="calle"/><br>
+                    Provincia: <br><input type="text" name="provincia"/><br>
+                    País: <br><input type="text" name="pais"/><br>
+                </form>
+            </fieldset>
+
+            <fieldset>
+                <legend>Método de pago</legend>
+                <form action="./procesa.php" method="post">
+                    Número de tarjeta: <br><input type="number" name="numtarjeta"/> <input type="number" min="2" name="mestarjeta"/> / <input type="number" min="2" name="aniotarjeta" /><br>
+                    CVC: <input type="number" min="3" name="cvc"/><br>
+                </form>
+            </fieldset>
         </article>
     </main>
 

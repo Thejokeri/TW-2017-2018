@@ -1,155 +1,155 @@
 <!DOCTYPE html>
 <!-- Ejemplo de página web -->
 <html lang="es">
+<link rel="shortcut icon" href="./img/favicon.png" type="image/png">
+    <head>
+        <title>Daft Punk | Tienda</title>
+        <meta charset="utf-8">
+        <meta name="author" content="Fernando Talavera Mendoza">
+        <meta name="keywords" content="tecnologías web, html, programación">
+    </head>
 
-<head>
-    <title>Daft Punk | Tienda</title>
-    <meta charset="utf-8">
-    <meta name="author" content="Fernando Talavera Mendoza">
-    <meta name="keywords" content="tecnologías web, html, programación">
-</head>
+    <body>
+        <header>
+            <h1>Daft Punk</h1>
+            <img src="./img/horizontal.jpg" alt="Imagen horizontal" />
+        </header>
 
-<body>
-    <header>
-        <h1>Daft Punk</h1>
-        <img src="./img/horizontal.jpg" alt="Imagen horizontal" />
-    </header>
+        <nav>
+            <ul>
+                <li>
+                    <a href="./index.html">Home</a>
+                </li>
+                <li>
+                    <a href="./bio.html">Biografía</a>
+                </li>
+                <li>
+                    <a href="./discografia/index.html">Discografía</a>
+                </li>
+                <li>
+                    <a href="./filmografia/index.html">Filmografía</a>
+                </li>
+                <li>
+                    <a href="./formulario.html">Tienda</a>
+                </li>
+            </ul>
+        </nav>
 
-    <nav>
-        <ul>
-            <li>
-                <a href="./index.html">Home</a>
-            </li>
-            <li>
-                <a href="./bio.html">Biografía</a>
-            </li>
-            <li>
-                <a href="./discografia/index.html">Discografía</a>
-            </li>
-            <li>
-                <a href="./filmografia/index.html">Filmografía</a>
-            </li>
-            <li>
-                <a href="./formulario.html">Tienda</a>
-            </li>
-        </ul>
-    </nav>
+        <main>
+            <article>
+                <h2>Tienda</h2>
+                
+                <!-- Añadir los albumes y el tipo de tarjeta y checkbox -->
+                <form action="procesa.php" method="post">
+                    <fieldset>
+                        <legend>Merchandise Oficial</legend>
+                        Álbumes: <br>
+                        <label><input type="checkbox" name="compra[]" value="homework"/> Homework</label> <br>
+                        <label><input type="checkbox" name="compra[]" value="discovery"/> Discovery</label> <br>
+                        <label><input type="checkbox" name="compra[]" value="human after all"/> Human After All</label> <br>
+                        <label><input type="checkbox" name="compra[]" value="tron" /> Tron: Legacy</label> <br>
+                        <label><input type="checkbox" name="compra[]" value="ram"/> Random Access Memories</label> <br>
+                    </fieldset>
 
-    <main>
-        <article>
-            <h2>Tienda</h2>
-            
-            <!-- Añadir los albumes y el tipo de tarjeta y checkbox -->
-            <form action="procesa.php" method="post">
-                <fieldset>
-                    <legend>Merchandise Oficial</legend>
-                    Álbumes: <br>
-                    <label><input type="checkbox" name="compra[]" value="homework"/> Homework</label> <br>
-                    <label><input type="checkbox" name="compra[]" value="discovery"/> Discovery</label> <br>
-                    <label><input type="checkbox" name="compra[]" value="human after all"/> Human After All</label> <br>
-                    <label><input type="checkbox" name="compra[]" value="tron" /> Tron: Legacy</label> <br>
-                    <label><input type="checkbox" name="compra[]" value="ram"/> Random Access Memories</label> <br>
-                </fieldset>
+                    <fieldset>
+                        <legend>Dirección de facturación</legend>
+                            Nombre: <br>
+                            <input type="text" name="nombre"/> <br> <br>
+                            Apellidos: <br>
+                            <input type="text" name="apellidos"/> <br> <br>
+                            Teléfono: <br>
+                            <input type="tel" name="tlf"/> <br> <br>
+                            Fecha de nacimiento: <br>
+                            <input type="number" min="2" name="diafecha"/> 
+                            <select name="mesfecha">
+                                <option value="--" selected>mes</option>
+                                <option value="01">01</option>
+                                <option value="02">02</option>
+                                <option value="03">03</option>
+                                <option value="04">04</option>
+                                <option value="05">05</option>
+                                <option value="06">06</option>
+                                <option value="07">07</option>
+                                <option value="08">08</option>
+                                <option value="09">09</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                            </select> 
+                            <input type="number" min="4" name="aniofecha"/> <br> <br>
+                            Calle: <br>
+                            <input type="text" name="calle"/> <br> <br>
+                            Código Postal: <br>
+                            <input type="number" name="cp"/> <br> <br>
+                            Población: <br>
+                            <input type="text" name="poblacion"/> <br> <br>
+                            Provincia: <br>
+                            <input type="text" name="provincia"/> <br> <br>
+                            País: <br>
+                            <input type="text" name="pais"/> <br> <br>
+                    </fieldset>
 
-                <fieldset>
-                    <legend>Dirección de facturación</legend>
-                        Nombre: <br>
-                        <input type="text" name="nombre"/> <br> <br>
-                        Apellidos: <br>
-                        <input type="text" name="apellidos"/> <br> <br>
-                        Teléfono: <br>
-                        <input type="tel" name="tlf"/> <br> <br>
-                        Fecha de nacimiento: <br>
-                        <input type="number" min="2" name="diafecha"/> 
-                        <select name="mesfecha">
-                            <option value="--" selected>mes</option>
-                            <option value="01">01</option>
-                            <option value="02">02</option>
-                            <option value="03">03</option>
-                            <option value="04">04</option>
-                            <option value="05">05</option>
-                            <option value="06">06</option>
-                            <option value="07">07</option>
-                            <option value="08">08</option>
-                            <option value="09">09</option>
-                            <option value="10">10</option>
-                            <option value="11">11</option>
-                            <option value="12">12</option>
-                        </select> 
-                        <input type="number" min="4" name="aniofecha"/> <br> <br>
-                        Calle: <br>
-                        <input type="text" name="calle"/> <br> <br>
-                        Código Postal: <br>
-                        <input type="number" name="cp"/> <br> <br>
-                        Población: <br>
-                        <input type="text" name="poblacion"/> <br> <br>
-                        Provincia: <br>
-                        <input type="text" name="provincia"/> <br> <br>
-                        País: <br>
-                        <input type="text" name="pais"/> <br> <br>
-                </fieldset>
+                    <fieldset>
+                        <legend>Método de pago</legend>
+                            Seleccion un métedo de pago: <br>
+                            <label><input type="radio" name="tipotarjeta" value="paypal"/> Paypal</label>
+                            <label><input type="radio" name="tipotarjeta" value="webmoney"/> WebMoney</label>
+                            <label><input type="radio" name="tipotarjeta" value="paysafecard"/> paysafecard</label>
+                            <label><input type="radio" name="tipotarjeta" value="Visa"/> Visa</label>
+                            <label><input type="radio" name="tipotarjeta" value="mastercard"/> MasterCard</label>
+                            <label><input type="radio" name="tipotarjeta" value="americanexpress"/> American Express</label>
+                            <label><input type="radio" name="tipotarjeta" value="jcb"/> JCB</label>
+                            <br> <br>
 
-                <fieldset>
-                    <legend>Método de pago</legend>
-                        Seleccion un métedo de pago: <br>
-                        <label><input type="radio" name="tipotarjeta" value="paypal"/> Paypal</label>
-                        <label><input type="radio" name="tipotarjeta" value="webmoney"/> WebMoney</label>
-                        <label><input type="radio" name="tipotarjeta" value="paysafecard"/> paysafecard</label>
-                        <label><input type="radio" name="tipotarjeta" value="Visa"/> Visa</label>
-                        <label><input type="radio" name="tipotarjeta" value="mastercard"/> MasterCard</label>
-                        <label><input type="radio" name="tipotarjeta" value="americanexpress"/> American Express</label>
-                        <label><input type="radio" name="tipotarjeta" value="jcb"/> JCB</label>
-                        <br> <br>
+                            Número de tarjeta: <br>
+                            <input type="number" name="numtarjeta"/> <br> <br>
+                            
+                            Fecha de caducidad y código de seguridad: <br>
+                            <select name="mestarjeta">
+                                <option value="--" selected>--</option>
+                                <option value="01">01</option>
+                                <option value="02">02</option>
+                                <option value="03">03</option>
+                                <option value="04">04</option>
+                                <option value="05">05</option>
+                                <option value="06">06</option>
+                                <option value="07">07</option>
+                                <option value="08">08</option>
+                                <option value="09">09</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                            </select> / 
+                            <select name="aniotarjeta">
+                                <option value="--" selected>----</option>
+                                <option value="18">2018</option>
+                                <option value="19">2019</option>
+                                <option value="20">2020</option>
+                                <option value="21">2021</option>
+                                <option value="22">2022</option>
+                                <option value="23">2023</option>
+                                <option value="24">2024</option>
+                                <option value="25">2025</option>
+                                <option value="26">2026</option>
+                                <option value="27">2027</option>
+                                <option value="28">2028</option>
+                                <option value="29">2029</option>
+                            </select>
+                            CVC: <input type="number" min="3" name="cvc"/> <br> <br>
 
-                        Número de tarjeta: <br>
-                        <input type="number" name="numtarjeta"/> <br> <br>
-                        
-                        Fecha de caducidad y código de seguridad: <br>
-                        <select name="mestarjeta">
-                            <option value="--" selected>--</option>
-                            <option value="01">01</option>
-                            <option value="02">02</option>
-                            <option value="03">03</option>
-                            <option value="04">04</option>
-                            <option value="05">05</option>
-                            <option value="06">06</option>
-                            <option value="07">07</option>
-                            <option value="08">08</option>
-                            <option value="09">09</option>
-                            <option value="10">10</option>
-                            <option value="11">11</option>
-                            <option value="12">12</option>
-                        </select> / 
-                        <select name="aniotarjeta">
-                            <option value="--" selected>----</option>
-                            <option value="18">2018</option>
-                            <option value="19">2019</option>
-                            <option value="20">2020</option>
-                            <option value="21">2021</option>
-                            <option value="22">2022</option>
-                            <option value="23">2023</option>
-                            <option value="24">2024</option>
-                            <option value="25">2025</option>
-                            <option value="26">2026</option>
-                            <option value="27">2027</option>
-                            <option value="28">2028</option>
-                            <option value="29">2029</option>
-                        </select>
-                        CVC: <input type="number" min="3" name="cvc"/> <br> <br>
+                            <input type="checkbox" name="guardar" value="true" checked/> Guardar mi información de pago para facilitar el proceso de pago la próxima vez. <br> <br>
+                    </fieldset>
+                
+                    <input type="submit" value="Enviar" /> <input type="reset" value="Limpiar formulario"/>
+                </form>
+            </article>
+        </main>
 
-                        <input type="checkbox" name="guardar" value="true" checked/> Guardar mi información de pago para facilitar el proceso de pago la próxima vez. <br> <br>
-                </fieldset>
-            
-                <input type="submit" value="Enviar" /> <input type="reset" value="Limpiar formulario"/>
-            </form>
-        </article>
-    </main>
-
-    <footer>
-        <p>
-            Mapa del sitio | © 2018 Copyright respective owners including: Daft Punk, Virgin Records, EMI, Soma Records, Columbia Records and Sony Music Entertaiment | Website designed and built by Fernando Talavera
-        </p>
-    </footer>
-</body>
+        <footer>
+            <p>
+                Mapa del sitio | © 2018 Copyright respective owners including: Daft Punk, Virgin Records, EMI, Soma Records, Columbia Records and Sony Music Entertaiment | Website designed and built by Fernando Talavera
+            </p>
+        </footer>
+    </body>
 
 </html>

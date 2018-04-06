@@ -1,0 +1,23 @@
+header {
+    background-color: violet;
+}
+
+nav {
+    background-color: salmon;
+}
+
+main {
+    background-color: beige;
+}
+
+h1 {
+    text-align: center;
+}
+
+ul li {
+    list-style-type: none;
+}
+
+#ingredientes {
+    background-color: cornflowerblue;
+}

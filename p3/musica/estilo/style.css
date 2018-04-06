@@ -1,0 +1,11 @@
+
+nav ul {
+  display: flex;
+}
+
+aside {
+    position: fixed;
+    left: 25%;
+    top: 25%;
+}
+

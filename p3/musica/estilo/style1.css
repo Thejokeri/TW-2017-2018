@@ -1,0 +1,49 @@
+/* CSS reset */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,b, u, 
+i, center, dl, dt, dd, ol, ul, li, fieldset, 
+form, label, legend, table, caption, tbody, 
+tfoot, thead, tr, th, td, article, aside, 
+canvas, details, embed, figure, figcaption, 
+footer, header, hgroup, menu, nav, output, 
+ruby, section, summary, time, mark, audio, 
+video,footer {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    vertical-align: baseline;
+}
+
+body, button, a, a:hover, 
+label, ul li a, div, img, *{
+  cursor: url(./cursor.png),auto;
+}
+
+/* Funcion para la accion del cursor */
+/*body.mouseDown, body.mouseDown button, body.mouseDown a, body.mouseDown a:hover,
+body.mouseDown label, body.mouseDown .button-qty, body.mouseDown .block-currency body.mouseDown .block-content ul li a,
+body.mouseDown #shopping-cart-table tfoot .button, body.mouseDown .icheckbox_square,
+body.mouseDown .iradio_square, body.mouseDown input[type="submit"].purchase-btn,
+body.mouseDown div, body.mouseDown .btn, body.mouseDown img {
+    cursor: url("./cursor-active.png"), auto
+}*/
+
+header img.horizontal {
+    padding: 25px;
+    background-color: white;
+}
+
+body {
+    background-color: black;
+    color: whitesmoke;
+    font-family: 'Fira Code';
+    src: url(../tipografia/FiraCode-Light.ttf);
+}
+
+h1, h2, h3 {
+    font-family: "Fira Code" ;
+    src: url(../tipografia/FiraCode-Regular.ttf);
+}

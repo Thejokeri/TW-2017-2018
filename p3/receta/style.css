@@ -37,9 +37,38 @@ nav {
     padding-left: 150px;
 }
 
-nav ul li {
+nav ul li{
     list-style-type: none;
+    color: rosybrown;
     line-height: 30px;
+    text-align: left;
+}
+
+li a {
+    text-decoration: none;
+    color: rgb(252, 96, 90);
+}
+
+a:link {
+    color: red;
+}
+
+a:visited {
+    color: tan;
+}
+
+a:hover {
+    color: hotpink;
+}
+
+a:active {
+    color: pink;
+}
+
+nav ul li:hover{
+    background-color: rgb(255, 151, 144);
+    cursor: pointer;
+    width: 175px;
 }
 
 body {
@@ -49,6 +78,7 @@ body {
 article.informacion {
     padding: 30px;
     padding-bottom: 1px;
+    margin-left: 6px;
 }
 
 article.informacion h2 {
@@ -59,7 +89,7 @@ article.informacion h2 {
 article.informacion dl{
     font-size: 23px;
     padding-bottom: 25px;
-    font-weight: 700;
+    font-weight: 900;
 }
 
 article.informacion dl dd {
@@ -103,18 +133,25 @@ article.descripcion h2{
 
 article.descripcion p {
     font-size: 20px;
-    text-indent: 32px;
-    width: 100%;
+    padding-left: 25px;
+    padding-right: 25px;
+    text-align: justify;
+    text-align-last:left;
 }
 
 article.preparacion {
     background-color: lightgreen;
     margin: 25px;
     padding: 25px;
+    margin-top:1px;
     font-size: 20px;
 }
 
 article.preparacion section {
+    margin: 10px;
+}
+
+article.preparacion section.elab {
     background-color: lightgray; 
 }
 
@@ -129,20 +166,24 @@ article.preparacion h2 {
 article.preparacion ol {
     padding: 35px;
     padding-left: 50px;
-    
+}
+
+article.preparacion p{
+    margin-bottom: 20px;
 }
 
 article.preparacion iframe{
-    display:block;
+    display: block;
     margin: 0 auto;
 }
 
 article.preparacion ul {
     padding: 25px;
+    padding-bottom: 10px;
 }
 
 footer {
     font-size: 20px;
-    text-indent: 10px;
+    text-indent: 15px;
     height: 50px;
 }

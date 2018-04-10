@@ -131,12 +131,14 @@ main article {
     text-align: left;
 }
 
-main article p, main article ul, main article h2.titulocuerpo, main article table{
-    padding-left:40px;
+main article{
+    text-align: center;
 }
 
-main article img {
-    margin:25px;
+main article p, main article ul, main article h2.titulocuerpo, main article table, main article ol{
+    padding:20px;
+    padding-left:40px;
+    text-align: left;
 }
 
 main article.articulos ul{

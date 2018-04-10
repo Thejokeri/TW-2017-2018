@@ -22,15 +22,6 @@ label, ul li a, div, img, *{
   cursor: url(./cursor.png),auto;
 }
 
-/* Funcion para la accion del cursor */
-/*body.mouseDown, body.mouseDown button, body.mouseDown a, body.mouseDown a:hover,
-body.mouseDown label, body.mouseDown .button-qty, body.mouseDown .block-currency body.mouseDown .block-content ul li a,
-body.mouseDown #shopping-cart-table tfoot .button, body.mouseDown .icheckbox_square,
-body.mouseDown .iradio_square, body.mouseDown input[type="submit"].purchase-btn,
-body.mouseDown div, body.mouseDown .btn, body.mouseDown img {
-    cursor: url("./cursor-active.png"), auto
-}*/
-
 header img.horizontal {
     margin: auto;
     width: 100%;
@@ -46,15 +37,16 @@ header img.logo {
 }
 
 nav {
-    background: linear-gradient(to right, #FBFBFB, #554f4f 0.4%, #554f4f 99.6%, #FBFBFB);
+    background: linear-gradient(to right, #FBFBFB, #554f4f 0.5%, #554f4f 99.5%, #FBFBFB);
     background-color: #554f4f;
     font-size: 14px;
-    white-space: nowrap;
     line-height: 1;
-    text-decoration: none;
     text-align: left;
     margin-left: 100px;
     margin-right: 100px;
+    padding:0;
+    padding-left: 2px;
+    padding-right: 2px;
 }
 
 ul li {
@@ -74,12 +66,32 @@ nav ul li a {
     text-decoration: none;
 }
 
+aside.discografia ul {
+    background-color: navajowhite;
+    background: linear-gradient(to right, black, navajowhite 0.5%, navajowhite 99.5%, black);
+    font-size: 14px;
+    padding:0;
+    padding-left: 2px;
+    padding-right: 2px;
+} 
+
+aside.discografia ul li {
+    text-align: center;
+    line-height: 35px;
+    background-color: #d47d67;
+    margin: 1px;
+}
+
+aside.discografia ul li a {
+    text-decoration: none;
+}
+
 a:link {
     color: whitesmoke;
 }
 
 a:visited {
-    color: #d95e40;
+    color: black;
 }
 
 a:hover {
@@ -90,15 +102,29 @@ a:active {
     color: pink;
 }
 
-main article table {
-    background-color: grey;
+table tr th, table tr td {
+    padding: 10px;
 }
 
-table tr{
+
+table tr:nth-child(odd){
     background-color: palegoldenrod;
 }
 
-nav ul li:hover, table tr{
+table tr:nth-child(even){
+    background-color: papayawhip;
+}
+
+table, table tr th {
+    background-color: palegreen;
+}
+
+table tr th:hover, table tr td:hover {
+    background-color: navy;
+    color: paleturquoise;
+}
+
+nav ul li:hover, aside.discografia ul li:hover{
     background-color: rgb(255, 151, 144);
 }
 
@@ -107,7 +133,6 @@ footer a:hover{
 }
 
 body {
-    
     color: silver;
     font-family: 'Fira Code';
     src: url(../tipografia/FiraCode-Light.ttf);
@@ -146,9 +171,8 @@ main article {
     text-align: center;
 }
 
-main article p, main article ul, main article h2.titulocuerpo, main article table, main article ol{
-    padding:20px;
-    padding-left:40px;
+main article p, main article ul, main article h2.titulocuerpo, main article table, main article ol, form{
+    padding: 20px;
     text-align: left;
 }
 
@@ -156,15 +180,15 @@ main article.articulos ul{
     text-align: center;
 }
 
-main article table {
-    background-color: grey;
+fieldset {
+    border-color: palegoldenrod;
+    border-width: 1px;
+    border-style: groove;
+    padding: 20px;
+    margin: 2px;
 }
 
-table tr{
-    background-color: palegoldenrod;
-}
-
-footer{
+footer {
     background: linear-gradient(to right, #FBFBFB, #554f4f 0.4%, #554f4f 99.6%, #FBFBFB);
     padding: 20px;
     margin-left: 100px;

@@ -34,7 +34,7 @@ body.mouseDown div, body.mouseDown .btn, body.mouseDown img {
 header img.horizontal {
     margin: auto;
     width: 100%;
-    background-color: #F9FCFB;
+    background-color: #FBFBFB;
 }
 
 header img.logo {
@@ -46,6 +46,7 @@ header img.logo {
 }
 
 nav {
+    background: linear-gradient(to right, #FBFBFB, #554f4f 0.4%, #554f4f 99.6%, #FBFBFB);
     background-color: #554f4f;
     font-size: 14px;
     white-space: nowrap;
@@ -62,7 +63,9 @@ ul li {
 }
 
 nav ul li {
-    line-height: 30px;
+    line-height: 35px;
+    font-size: 20px;
+    text-align: center;
     background-color: #d47d67;
     margin: 2px;
 }
@@ -88,12 +91,16 @@ a:active {
     color: pink;
 }
 
-nav ul li:hover, footer p:hover{
+nav ul li:hover{
+    background-color: rgb(255, 151, 144);
+}
+
+footer a:hover{
     background-color: rgb(255, 151, 144);
 }
 
 body {
-    background-color: #F9FCFB;;
+    
     color: silver;
     font-family: 'Fira Code';
     src: url(../tipografia/FiraCode-Light.ttf);
@@ -107,6 +114,7 @@ body img.imagen {
 }
 
 body aside, body main {
+    background: linear-gradient(to right, #FBFBFB, black 0.4%, black 99.6%, #FBFBFB);
     background-color: black;
     padding: 25px;
     margin-left: 100px;
@@ -146,9 +154,9 @@ main article.articulos ul{
 }
 
 footer{
-    background-color: #554f4f;
+    background: linear-gradient(to right, #FBFBFB, #554f4f 0.4%, #554f4f 99.6%, #FBFBFB);
     padding: 20px;
     margin-left: 100px;
     margin-right: 100px;
-    text-align: right;
+    text-align: center;
 }

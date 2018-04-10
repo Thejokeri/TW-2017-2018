@@ -39,7 +39,7 @@ header img.horizontal {
 
 header img.logo {
     margin-top: 20px;
-    margin-left: 45%;
+    margin-left: 45.5%;
     margin-bottom: 20px;
     padding: 2px;
     background-color: rgb(139, 139, 139);
@@ -53,7 +53,6 @@ nav {
     line-height: 1;
     text-decoration: none;
     text-align: left;
-    padding: 25px;
     margin-left: 100px;
     margin-right: 100px;
 }
@@ -91,7 +90,15 @@ a:active {
     color: pink;
 }
 
-nav ul li:hover{
+main article table {
+    background-color: grey;
+}
+
+table tr{
+    background-color: palegoldenrod;
+}
+
+nav ul li:hover, table tr{
     background-color: rgb(255, 151, 144);
 }
 
@@ -136,10 +143,6 @@ aside ul {
 main article {
     padding: 10px;
     padding-left: 20px;
-    text-align: left;
-}
-
-main article{
     text-align: center;
 }
 
@@ -151,6 +154,14 @@ main article p, main article ul, main article h2.titulocuerpo, main article tabl
 
 main article.articulos ul{
     text-align: center;
+}
+
+main article table {
+    background-color: grey;
+}
+
+table tr{
+    background-color: palegoldenrod;
 }
 
 footer{

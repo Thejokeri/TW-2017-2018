@@ -144,6 +144,7 @@ article.preparacion {
     padding: 25px;
     margin-top:1px;
     font-size: 20px;
+    text-align: center;
 }
 
 article.preparacion section {
@@ -160,6 +161,10 @@ article.preparacion h2 {
     text-align: center;
 }
 
+article.preparacion ol, article.preparacion p, article.preparacion ul{
+    text-align: left;
+}
+
 article.preparacion ol {
     padding: 35px;
     padding-left: 50px;
@@ -169,14 +174,13 @@ article.preparacion p{
     margin-bottom: 20px;
 }
 
-article.preparacion iframe{
-    display: block;
-    margin: 0 auto;
-}
-
 article.preparacion ul {
     padding: 25px;
     padding-bottom: 10px;
+}
+
+article.preparacion section.elab iframe {
+    max-width: 50%;
 }
 
 footer {

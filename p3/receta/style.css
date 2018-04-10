@@ -19,8 +19,7 @@ video,footer {
 
 header {
     background-color: lightblue;
-    padding: 20px;
-    
+    padding: 20px; 
 }
 
 h1 {
@@ -39,7 +38,6 @@ nav {
 
 nav ul li{
     list-style-type: none;
-    color: rosybrown;
     line-height: 30px;
     text-align: left;
 }

@@ -73,10 +73,14 @@ body {
     background-color: beige;
 }
 
+body main {
+    margin-left: 1%;
+    margin-right: 1%;
+}
+
 article.informacion {
-    padding: 30px;
     padding-bottom: 1px;
-    margin-left: 6px;
+    margin-top: 2%;
 }
 
 article.informacion h2 {
@@ -96,18 +100,12 @@ article.informacion dl dd {
     text-indent: 32px;
 }
 
-article.ingr {
-    padding-left: 17px; 
-    margin: 1%;
-    margin-top: 0%;
-}
-
 article.ingr h2 {
     background-color: cornflowerblue;
     color: white;
     font-size: 30px;
     padding-top: 1.5%;
-    padding-left: 3%;
+    padding-left: 4%;
     height: 50px;
 }
 
@@ -115,7 +113,7 @@ article.ingr ul {
     background-color: lightskyblue;
     padding: 25px;
     padding-bottom: 1px;
-    padding-left: 30px;
+    padding-left: 40px;
     font-style: oblique;
 }
 
@@ -140,7 +138,6 @@ article.descripcion p {
 
 article.preparacion {
     background-color: lightgreen;
-    margin: 25px;
     padding: 25px;
     margin-top:1px;
     font-size: 20px;
@@ -186,5 +183,6 @@ article.preparacion section.elab iframe {
 footer {
     font-size: 20px;
     text-indent: 15px;
+    padding-top:2%;
     height: 50px;
 }

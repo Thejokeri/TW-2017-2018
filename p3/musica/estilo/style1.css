@@ -110,20 +110,24 @@ table, table tr,  table tr th, table tr td {
 }
 
 table tr:nth-child(odd){
-    background-color: palegoldenrod;
+    background-color: #FFF8DB;
 }
 
 table tr:nth-child(even){
-    background-color: papayawhip;
+    background-color: #FFE4C2;
 }
 
 table, table tr th {
-    background-color: palegreen;
+    background-color: silver;
 }
 
 table tr th:hover, table tr td:hover {
-    background-color: navy;
+    background-color: #d95e40;
     color: paleturquoise;
+}
+
+table tr th, table tr td {
+    color: black;
 }
 
 nav ul li:hover, aside.discografia ul li:hover{
@@ -136,15 +140,19 @@ footer a:hover{
 
 body {
     color: silver;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     font-family: 'Fira Code';
     src: url(../tipografia/FiraCode-Light.ttf);
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
 body img.imagen {
     margin: 3px;
     padding: 1px;
     background-color: gold;
+}
+
+body aside {
+    text-align: center;
 }
 
 body aside, body main {
@@ -158,9 +166,6 @@ body aside, body main {
 h1, h2, h3 {
     color: gold;
     padding: 25px;
-    font-family: "Fira Code" ;
-    src: url(../tipografia/FiraCode-Regular.ttf);
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
 aside ul {

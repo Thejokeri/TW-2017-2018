@@ -22,6 +22,10 @@ label, ul li a, div, img, *{
   cursor: url(./cursor.png),auto;
 }
 
+header {
+    text-align: center;
+}
+
 header img.horizontal {
     margin: auto;
     width: 100%;
@@ -30,7 +34,6 @@ header img.horizontal {
 
 header img.logo {
     margin-top: 20px;
-    margin-left: 45.5%;
     margin-bottom: 20px;
     padding: 2px;
     background-color: rgb(139, 139, 139);
@@ -59,7 +62,7 @@ ul li {
 
 nav ul li {
     display: inline;
-    line-height: 35px;
+    line-height: 40px;
     font-size: 20px;
     text-align: center;
     background-color: #d47d67;
@@ -125,27 +128,28 @@ a:active {
 }
 
 table, table tr,  table tr th, table tr td {
-    width: 50%;
-    height: 50%;
-    max-width: 100%;
-    padding:0;
+    max-width: 107%;
 }
 
 table tr:nth-child(odd){
-    background-color: palegoldenrod;
+    background-color: #FFF8DB;
 }
 
 table tr:nth-child(even){
-    background-color: papayawhip;
+    background-color: #FFE4C2;
 }
 
 table, table tr th {
-    background-color: palegreen;
+    background-color: silver;
 }
 
 table tr th:hover, table tr td:hover {
-    background-color: navy;
+    background-color: #d95e40;
     color: paleturquoise;
+}
+
+table tr th, table tr td {
+    color: black;
 }
 
 nav ul li:hover, aside.discografia ul li:hover{
@@ -158,9 +162,9 @@ footer a:hover{
 
 body {
     color: silver;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     font-family: 'Fira Code';
     src: url(../tipografia/FiraCode-Light.ttf);
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
 body img.imagen {
@@ -181,6 +185,8 @@ body aside {
     background: linear-gradient(to right, #FBFBFB, black 0.4%, black 99.6%, #FBFBFB);
     background-color: black;
     padding: 5%;
+    padding-left:2px;
+    padding-right:2px;
     margin-right: 7.8%;
 }
 
@@ -191,12 +197,14 @@ body main.aside {
     margin-left: 7.8%;
 }
 
-h1, h2, h3 {
+h1, h2, h3{
     color: gold;
     padding: 25px;
-    font-family: "Fira Code" ;
-    src: url(../tipografia/FiraCode-Regular.ttf);
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    max-width: 100%;
+}
+
+aside h3 {
+    font-size: 16px;
 }
 
 aside {
@@ -212,7 +220,7 @@ main article {
     text-align: center;
 }
 
-main article p, main article ul, main article h2.titulocuerpo, main article table, main article ol, form{
+main article p, main article ul, main article h2.titulocuerpo, main article ol, form{
     padding: 20px;
     text-align: left;
 }
@@ -224,9 +232,10 @@ main article.articulos ul{
 main img{
     max-width: 100%;
 }
-
 aside img{
-    max-width: 200%;
+    width: 100px;
+    height: 100px;
+    max-width: 100%;
 }
 
 fieldset {

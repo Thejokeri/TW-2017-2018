@@ -42,8 +42,8 @@ nav {
     font-size: 14px;
     line-height: 1;
     text-align: left;
-    margin-left: 100px;
-    margin-right: 100px;
+    margin-left: 7.8%;
+    margin-right: 7.8%;
     padding:0;
     padding-left: 2px;
     padding-right: 2px;
@@ -75,13 +75,13 @@ nav ul li a {
 aside {
     box-sizing: border-box;
     float: right;
-    width: 20%;
+    width: 24%;
 }
 
 main.aside {
     box-sizing: border-box;
     float: left;
-    width: 64%;
+    width: 60.3%;
 }
 
 footer {
@@ -124,10 +124,12 @@ a:active {
     color: pink;
 }
 
-table tr th, table tr td {
-    padding: 10px;
+table, table tr,  table tr th, table tr td {
+    width: 50%;
+    height: 50%;
+    max-width: 100%;
+    padding:0;
 }
-
 
 table tr:nth-child(odd){
     background-color: palegoldenrod;
@@ -171,22 +173,22 @@ body main.normal {
     background: linear-gradient(to right, #FBFBFB, black 0.4%, black 99.6%, #FBFBFB);
     background-color: black;
     padding: 25px;
-    margin-left: 100px;
-    margin-right: 100px;
+    margin-left: 7.8%;
+    margin-right: 7.8%;
 }
 
 body aside {
     background: linear-gradient(to right, #FBFBFB, black 0.4%, black 99.6%, #FBFBFB);
     background-color: black;
-    padding: 25px;
-    margin-right: 101px;
+    padding: 5%;
+    margin-right: 7.8%;
 }
 
 body main.aside {
     background: linear-gradient(to right, #FBFBFB, black 0.5%, black 99.5%, #FBFBFB);
     background-color: black;
     padding: 25px;
-    margin-left: 100px;
+    margin-left: 7.8%;
 }
 
 h1, h2, h3 {
@@ -197,6 +199,9 @@ h1, h2, h3 {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
+aside {
+    text-align: center;
+}
 aside ul {
     padding: 20px;
 }
@@ -216,6 +221,14 @@ main article.articulos ul{
     text-align: center;
 }
 
+main img{
+    max-width: 100%;
+}
+
+aside img{
+    max-width: 200%;
+}
+
 fieldset {
     border-color: palegoldenrod;
     border-width: 3px;
@@ -227,7 +240,7 @@ fieldset {
 footer {
     background: linear-gradient(to right, #FBFBFB, #554f4f 0.4%, #554f4f 99.6%, #FBFBFB);
     padding: 20px;
-    margin-left: 100px;
-    margin-right: 100px;
+    margin-left: 7.8%;
+    margin-right: 7.8%;
     text-align: center;
 }

@@ -22,6 +22,10 @@ label, ul li a, div, img, *{
   cursor: url(./cursor.png),auto;
 }
 
+header {
+    text-align: center;
+}
+
 header img.horizontal {
     margin: auto;
     width: 100%;
@@ -30,7 +34,6 @@ header img.horizontal {
 
 header img.logo {
     margin-top: 20px;
-    margin-left: 45.5%;
     margin-bottom: 20px;
     padding: 2px;
     background-color: rgb(139, 139, 139);
@@ -42,8 +45,8 @@ nav {
     font-size: 14px;
     line-height: 1;
     text-align: left;
-    margin-left: 100px;
-    margin-right: 100px;
+    margin-left: 7.8%;
+    margin-right: 7.8%;
     padding:0;
     padding-left: 2px;
     padding-right: 2px;
@@ -102,10 +105,9 @@ a:active {
     color: pink;
 }
 
-table tr th, table tr td {
-    padding: 10px;
+table, table tr,  table tr th, table tr td {
+    max-width: 107%;
 }
-
 
 table tr:nth-child(odd){
     background-color: palegoldenrod;
@@ -149,8 +151,8 @@ body aside, body main {
     background: linear-gradient(to right, #FBFBFB, black 0.4%, black 99.6%, #FBFBFB);
     background-color: black;
     padding: 25px;
-    margin-left: 100px;
-    margin-right: 100px;
+    margin-left: 7.8%;
+    margin-right: 7.8%;
 }
 
 h1, h2, h3 {
@@ -171,13 +173,17 @@ main article {
     text-align: center;
 }
 
-main article p, main article ul, main article h2.titulocuerpo, main article table, main article ol, form{
+main article p, main article ul, main article h2.titulocuerpo, main article ol, form{
     padding: 20px;
     text-align: left;
 }
 
 main article.articulos ul{
     text-align: center;
+}
+
+img{
+    max-width: 100%;
 }
 
 fieldset {
@@ -191,7 +197,7 @@ fieldset {
 footer {
     background: linear-gradient(to right, #FBFBFB, #554f4f 0.4%, #554f4f 99.6%, #FBFBFB);
     padding: 20px;
-    margin-left: 100px;
-    margin-right: 100px;
+    margin-left: 7.8%;
+    margin-right: 7.8%;
     text-align: center;
 }

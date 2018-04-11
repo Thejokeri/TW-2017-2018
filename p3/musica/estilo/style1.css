@@ -22,6 +22,10 @@ label, ul li a, div, img, *{
   cursor: url(./cursor.png),auto;
 }
 
+body{
+    background-color: rgba(190, 188, 188, 0.473);
+}
+
 header {
     text-align: center;
 }
@@ -40,13 +44,13 @@ header img.logo {
 }
 
 nav {
-    background: linear-gradient(to right, #FBFBFB, #554f4f 0.5%, #554f4f 99.5%, #FBFBFB);
+    background: linear-gradient(to right, rgba(114, 114, 114, 0.473), #554f4f 0.5%, #554f4f 99.5%, rgba(114, 114, 114, 0.473));
     background-color: #554f4f;
     font-size: 14px;
     line-height: 1;
     text-align: left;
-    margin-left: 7.8%;
-    margin-right: 7.8%;
+    margin-left: 10%;
+    margin-right: 10%;
     padding:0;
     padding-left: 2px;
     padding-right: 2px;
@@ -156,11 +160,13 @@ body aside {
 }
 
 body aside, body main {
-    background: linear-gradient(to right, #FBFBFB, black 0.4%, black 99.6%, #FBFBFB);
+    background: linear-gradient(to right, rgba(114, 114, 114, 0.473), black 0.4%, black 99.6%, rgba(114, 114, 114, 0.473));
     background-color: black;
     padding: 25px;
-    margin-left: 7.8%;
-    margin-right: 7.8%;
+    padding-left:30px;
+    padding-right:30;
+    margin-left: 10%;
+    margin-right: 10%;
 }
 
 h1, h2, h3 {
@@ -202,7 +208,7 @@ fieldset {
 footer {
     background: linear-gradient(to right, #FBFBFB, #554f4f 0.4%, #554f4f 99.6%, #FBFBFB);
     padding: 20px;
-    margin-left: 7.8%;
-    margin-right: 7.8%;
+    margin-left: 10%;
+    margin-right: 10%;
     text-align: center;
 }

@@ -25,6 +25,8 @@ label, ul li a, div, img, *{
 header {
     display: flex;
     text-align: center;
+    background-color: #554f4f;
+    margin-bottom:1%;
 }
 
 nav {
@@ -60,6 +62,10 @@ body{
     margin: 1%;
 }
 
+img, h2{
+    max-width: 100%;
+}
+
 main {
     display: flex;
     background-color: black;
@@ -76,6 +82,8 @@ article {
     align-content: center;
     background-color: #554f4f;
     padding: 5%;
+    width: 33%;
+    max-width: 100%;
 }
 
 #Exitos{
@@ -84,6 +92,8 @@ article {
     align-content: center;
     background-color: #554f4f;
     padding: 5%;
+    width: 33%;
+    max-width: 100%;
 }
 
 #Articulos{
@@ -92,6 +102,8 @@ article {
     align-content: center;
     background-color: #554f4f;
     padding: 5%;
+    width: 33%;
+    max-width: 100%;
 }
 
 a:link {

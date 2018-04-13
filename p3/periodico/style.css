@@ -33,17 +33,30 @@ nav ul li a {
     padding: 5px;
 }
 
+a:link {
+    color: white;
+}
+
+a:visited {
+    color: whitesmoke;
+}
+
+a:hover {
+    color: orange;
+}
+
+a:active {
+    color: yellowgreen;
+}
+
 header {
     text-align: center;
     padding: 5%; 
 }
 
 main {
-    padding:5%; 
-}
-
-article{
-    margin-top: 2%;
+    padding:10%; 
+    padding-top:0;
 }
 
 section {
@@ -53,7 +66,7 @@ section {
 #noticia_destacada {
     float: right;
     width: 60%;
-    padding-bottom: 25%;
+    padding-bottom: 29%;
 }
 
 #noticia_destacada img, #noticia_destacada h2{
@@ -64,7 +77,6 @@ section {
 article#Dos_Columnas section.noticia > img, article#Dos_Columnas section.noticia h2{
     float: left;
     width: 37%;
-    padding-bottom: 2%;
     padding-left: 0.7%;
 }
 
@@ -78,9 +90,10 @@ article#Tres_Columnas section.noticia {
 }
 
 article#Tres_Columnas section.noticia > img, article#Tres_Columnas section.noticia > h2 {
-    width: 60%;
+    width: 70%;
+    padding: 5%;
+    padding-bottom:0;
 }
-
 
 article#Anuncios {
     clear: both;
@@ -89,36 +102,20 @@ article#Anuncios {
 article#Anuncios section.anuncio {
     float: left;
     width: 20%;
+    padding: 2%;
 }
 
-article#Anuncios section.anuncio{
-    padding: 2%;
+article#Anuncios section.anuncio img{
+    width: 80%;
 }
 
 footer {
     text-align: center;
     background-color: orangered;
     padding: 10px;
-    margin-top: 20%;
+    margin-top: 10%;
 }
 
 footer p{
     color: white;
 }
-
-/*#Titular {
-    float: right;
-    width: 20%;
-}
-
-article.Dos_Columnas {
-    float: left;
-}
-
-article.Tres_Columnas {
-    float:both;
-}
-
-article.Tres_Columnas img{
-    float: left;
-}*/

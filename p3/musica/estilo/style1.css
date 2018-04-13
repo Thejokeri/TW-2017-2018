@@ -22,8 +22,16 @@ label, ul li a, div, img, *{
   cursor: url(./cursor.png),auto;
 }
 
-body{
-    background-color: rgba(190, 188, 188, 0.473);
+body nav, body aside{
+    box-shadow: 0 4px 8px 12px rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+body main{
+    box-shadow: 0 20px 8px 12px rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+body footer{
+    box-shadow: 0 30px 8px 10px rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 header {
@@ -44,14 +52,13 @@ header img.logo {
 }
 
 nav {
-    background: linear-gradient(to right, rgba(114, 114, 114, 0.473), #554f4f 0.5%, #554f4f 99.5%, rgba(114, 114, 114, 0.473));
     background-color: #554f4f;
     font-size: 14px;
     line-height: 1;
     text-align: left;
     margin-left: 10%;
     margin-right: 10%;
-    padding:0;
+    margin-bottom: 2%;
     padding-left: 2px;
     padding-right: 2px;
 }
@@ -65,7 +72,7 @@ nav ul li {
     font-size: 20px;
     text-align: center;
     background-color: #d47d67;
-    margin: 2px;
+    margin: 1px;
 }
 
 nav ul li a {
@@ -145,8 +152,6 @@ footer a:hover{
 body {
     color: silver;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    font-family: 'Fira Code';
-    src: url(../tipografia/FiraCode-Light.ttf);
 }
 
 body img.imagen {
@@ -160,11 +165,10 @@ body aside {
 }
 
 body aside, body main {
-    background: linear-gradient(to right, rgba(114, 114, 114, 0.473), black 0.4%, black 99.6%, rgba(114, 114, 114, 0.473));
     background-color: black;
     padding: 25px;
     padding-left:30px;
-    padding-right:30;
+    padding-right:30px;
     margin-left: 10%;
     margin-right: 10%;
 }
@@ -206,7 +210,7 @@ fieldset {
 }
 
 footer {
-    background: linear-gradient(to right, #FBFBFB, #554f4f 0.4%, #554f4f 99.6%, #FBFBFB);
+    background-color: #554f4f;
     padding: 20px;
     margin-left: 10%;
     margin-right: 10%;

@@ -163,8 +163,6 @@ footer a:hover{
 body {
     color: silver;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    font-family: 'Fira Code';
-    src: url(../tipografia/FiraCode-Light.ttf);
 }
 
 body img.imagen {
@@ -182,7 +180,7 @@ body main.normal {
 }
 
 body aside {
-    background: linear-gradient(to right, #FBFBFB, black 0.4%, black 99.6%, #FBFBFB);
+    background: linear-gradient(to right, black 0.4%, black 99.6%, #FBFBFB);
     background-color: black;
     padding: 5%;
     padding-left:2px;
@@ -191,7 +189,7 @@ body aside {
 }
 
 body main.aside {
-    background: linear-gradient(to right, #FBFBFB, black 0.5%, black 99.5%, #FBFBFB);
+    background: linear-gradient(to right, #FBFBFB, black 0.5%, black 99.5%);
     background-color: black;
     padding: 25px;
     margin-left: 7.8%;

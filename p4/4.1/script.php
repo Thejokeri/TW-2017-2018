@@ -1,17 +1,31 @@
 <?php
+        $userAgent = $_SERVER['HTTP_USER_AGENT'];
         
-        // create curl resource 
+        // Creamos el recurso
         $curl = curl_init(); 
 
-        // set url 
-        curl_setopt($curl, CURLOPT_URL, "http://biblioteca.ugr.es"); 
+        $nombre = urlencode($_POST['nombre']);
 
-        //return the transfer as a string 
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1); 
+        $url = "http://bencore.ugr.es/iii/encore/search?formids=target&lang=spi&suite=def&reservedids=lang%2Csuite&submitmode=&submitname=&target=$nombre";
 
-        // $output contains the output string 
+        // Establecemos las opciones
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_POST, true);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_USERAGENT, $userAgent);
+
+        //$output contiene el output string
         $output = curl_exec($curl); 
+        
+        $salida = '<span class="additionalFields customSecondaryText"> / Robin Nixon</span>';
 
-        // close curl resource to free up system resources 
+        preg_match_all('{<a id="recordDisplayLink2Component\w*[0-9]*" href=".*">\s*(.*)<\/a>}', $output, $arraylibros);
+        preg_match_all('{<span class="additionalFields customSecondaryText">\s(.*)</span><\/span>}', $output, $arrayautores);
+
+        for($i=0;  $i < count($arraylibros); $i++){
+                echo "$arraylibros[$i]";
+        }
+
+        //cerramos el recurso 
         curl_close($curl);      
 ?>

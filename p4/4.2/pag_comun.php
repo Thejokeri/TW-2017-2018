@@ -16,7 +16,7 @@
                     <body>
                         <h1>EDITODO</h1>
                         <p>Seleccione de nuestro amplio catálogo de revistas entre estas temáticas:</p>
-                        <form action="pag_revista.php" method="GET">
+                        <form action="pag_revista.php" method="POST">
                             <fieldset>
                                 <legend>Área Temática</legend>
                                 Seleccion un área temática: <br>
@@ -165,7 +165,7 @@ HTML;
 HTML;
                     echo <<<HTML
                                 <select name="aniotarjeta">
-                                    <option value="--" selected>----</option>
+                                    <option value="----" selected>----</option>
 HTML;
                                 for($i = 2018; $i <= 2029; $i++)
                                     echo '<option value="',$i,'">',$i,'</option>';

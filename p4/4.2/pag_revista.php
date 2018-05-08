@@ -1,7 +1,7 @@
 <?php
     require "pag_comun.php";
 
-    $tema = urlencode($_GET['tema']);
+    $tema = urlencode($_POST['tema']);
 
     function num_tema($tema){
         if($tema == "divulgacion"){

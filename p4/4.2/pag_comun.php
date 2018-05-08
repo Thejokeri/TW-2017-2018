@@ -199,7 +199,7 @@ HTML;
 echo <<<HTML
                             </fieldset>
                             <br>
-                            <input type="checkbox" name="guardar" value="true"/> Desea recibir publicidad a su email.<br> <br>
+                            <input type="checkbox" name="publicidad" value="true"/> Desea recibir publicidad a su email.<br> <br>
                             <br>
                             <input type="submit" value="Enviar"/>
                         </form>

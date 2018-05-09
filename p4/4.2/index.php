@@ -3,9 +3,17 @@
     
     if(isset($_POST['botonenvio'])){
         // Validar los datos
-        $camposvacio = array_keys($_POST, null);
+    
+        $camposvacios = array_keys($_POST, NULL);
+        $campos = $_POST;
+
+        print_r($campos);
         
-        if(empty($camposvacio)){
+        mb_revista_inicio($camposvacios, $campos);
+        mb_revista($tema);
+        mb_revista_fin($num_tema);
+        
+        if(empty($camposvacios)){
             if(validacion($_POST))
                 listar_info($_POST);
         }

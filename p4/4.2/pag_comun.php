@@ -33,7 +33,6 @@ HTML;
     }
 
     function valcuenta_bancaria($cuenta1,$cuenta2,$cuenta3,$cuenta4){
-        return true;
         if (strlen($cuenta1)!=4) return false;
         if (strlen($cuenta2)!=4) return false;
         if (strlen($cuenta3)!=2) return false;
@@ -56,6 +55,16 @@ HTML;
         if ($chequeo == 11) $chequeo = 0;
         if ($chequeo == 10) $chequeo = 1;
         return $chequeo;
+    }
+
+    function esmayordeedad($fechanacimiento){
+        $from = new DateTime($fechanacimiento);
+        $to = new DateTime('today');
+        
+        if($from->diff($to)->y > 18)
+            return true;
+        else
+            return false;
     }
 
     function select_fechanac(){
@@ -339,6 +348,7 @@ HTML;
                                 Fecha de nacimiento: <br> <br>
 HTML;
                                 if(is_vacio($camposvacios, 'diafecha') || is_vacio($camposvacios, 'mesfecha') || is_vacio($camposvacios, 'aniofecha')){
+                                    $validacion['fechanacimiento'] = false;
                                     if(!is_vacio($camposvacios, 'diafecha')){
                                         echo '<select name="diafecha">';
                                         echo '<option value="', $campos['diafecha'], '" selected>', $campos['diafecha'],'</option>';
@@ -382,25 +392,50 @@ HTML;
                                     }
                                     echo '<p style="color:red;">Campo vacio</p>';
                                 }else{
-                                    echo '<select name="diafecha">';
-                                    echo '<option value="', $campos['diafecha'], '" selected>', $campos['diafecha'],'</option>';
-                                    for($i = 1; $i <= 31; $i++)
-                                        echo '<option value="',$i,'">',$i,'</option>';
-                                    echo '</select>';
-
-                                    echo '<select name="mesfecha">';
-                                    echo '<option value="', $campos['mesfecha'], '" selected>', $campos['mesfecha'],'</option>';
-                                        for($i = 1; $i <= 12; $i++)
+                                    $fechanacimiento = $campos['aniofecha'] . '-' . $campos['mesfecha'] . '-' . $campos['diafecha']; 
+                                    if(!esmayordeedad($fechanacimiento)){
+                                        $validacion['fechanacimiento'] = false;
+                                        echo '<select name="diafecha">';
+                                        echo '<option value="', $campos['diafecha'], '" selected>', $campos['diafecha'],'</option>';
+                                        for($i = 1; $i <= 31; $i++)
                                             echo '<option value="',$i,'">',$i,'</option>';
-                                    echo '</select>';
+                                        echo '</select>';
+
+                                        echo '<select name="mesfecha">';
+                                        echo '<option value="', $campos['mesfecha'], '" selected>', $campos['mesfecha'],'</option>';
+                                            for($i = 1; $i <= 12; $i++)
+                                                echo '<option value="',$i,'">',$i,'</option>';
+                                        echo '</select>';
                                     
-                                    echo '<select name="aniofecha">';
-                                    echo '<option value="', $campos['aniofecha'], '" selected>', $campos['aniofecha'],'</option>';
-                                        for($i = 1900; $i <= 2018; $i++)
-                                            echo '<option value="',$i,'">',$i,'</option>';
-                                    echo '</select>';
+                                        echo '<select name="aniofecha">';
+                                        echo '<option value="', $campos['aniofecha'], '" selected>', $campos['aniofecha'],'</option>';
+                                            for($i = 1900; $i <= 2018; $i++)
+                                                echo '<option value="',$i,'">',$i,'</option>';
+                                        echo '</select>';
 
-                                    echo "<br> <br>";
+                                        echo '<p style="color:red;">Campo erroneo, no eres mayor de edad</p>';
+                                    }else{
+                                        $validacion['fechanacimiento'] = true;
+                                        echo '<select name="diafecha">';
+                                        echo '<option value="', $campos['diafecha'], '" selected>', $campos['diafecha'],'</option>';
+                                        for($i = 1; $i <= 31; $i++)
+                                            echo '<option value="',$i,'">',$i,'</option>';
+                                        echo '</select>';
+
+                                        echo '<select name="mesfecha">';
+                                        echo '<option value="', $campos['mesfecha'], '" selected>', $campos['mesfecha'],'</option>';
+                                            for($i = 1; $i <= 12; $i++)
+                                                echo '<option value="',$i,'">',$i,'</option>';
+                                        echo '</select>';
+                                    
+                                        echo '<select name="aniofecha">';
+                                        echo '<option value="', $campos['aniofecha'], '" selected>', $campos['aniofecha'],'</option>';
+                                            for($i = 1900; $i <= 2018; $i++)
+                                                echo '<option value="',$i,'">',$i,'</option>';
+                                        echo '</select>';
+
+                                        echo '<br> <br>';
+                                    }
                                 }
                         
                     echo <<<HTML
@@ -531,7 +566,7 @@ HTML;
                     echo '<label><input type="radio" name="revista" value="div4" checked/> Ciencia con sabor </label>';
                 else
                     echo '<label><input type="radio" name="revista" value="div4"/> Ciencia con sabor </label>';
-                
+                echo '<input type="hidden" name="divulgacion" value="">';
                 echo '<br> <br>';
             }
 
@@ -853,11 +888,15 @@ HTML;
     }
 
     function validacion($value){
-        foreach ($value as $key => $valor){
-            if(!$valor){
-                return false;
+
+        if(!empty($value)){
+            foreach ($value as $key => $valor){
+                if(!$valor){
+                    return false;
+                }
             }
-        }
+        }else
+            return false;
 
         return true;
     }
@@ -874,7 +913,7 @@ HTML;
 HTML;
                         echo "<ul>";
 
-                        foreach ($_POST as $c => $v) {
+                        foreach ($post as $c => $v) {
                             if (is_array($v)) { 
                                 echo "<li>$c = "; 
                                 print_r($v); 

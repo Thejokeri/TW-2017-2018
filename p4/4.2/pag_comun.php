@@ -465,9 +465,16 @@ HTML;
                                     echo '<input type="email" name="email"/>';
                                     echo '<p style="color:red;">Campo vacio</p>';
                                 }else{
-                                    $validacion['nombre'] = true;
-                                    echo '<input type="email" name="email" value="', $campos['email'], '"/>';
-                                    echo "<br> <br>";
+                                    if(filter_var($campos['email'], FILTER_VALIDATE_EMAIL)){
+                                        $validacion['email'] = true;
+                                        echo '<input type="email" name="email" value="', $campos['email'], '"/>';
+                                        echo "<br> <br>";
+                                    }else{
+                                        $validacion['email'] = false;
+                                        echo '<input type="email" name="email" value="', $campos['email'], '"/>';
+                                        echo '<p style="color:red;">Campo erroneo</p>';
+                                    }
+                                    
                                 }
                     echo <<<HTML
                                 Número de CC: <br> <br> 

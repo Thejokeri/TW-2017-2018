@@ -25,7 +25,7 @@ HTML;
                                                     echo "<br> <br>";
                                                 }else{
                                                     if(isset($_COOKIE['tallaerror'])){
-                                                        echo '<input type="number" name="talla"/>';
+                                                        echo '<input type="number" name="talla" value="', $_COOKIE['tallaerror'], '"/>';
                                                         echo '<p style="color:red;">Campo erroneo, debe de estar entre 30 y 50</p>';
                                                     }
                                                     if(isset($_COOKIE['tallavacio'])){

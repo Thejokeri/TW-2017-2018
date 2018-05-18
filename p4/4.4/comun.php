@@ -109,7 +109,7 @@
 
         echo <<<HTML
             <table border = '1'>
-                <thead><tr><th> Usuario </th><th> Apellidos </th><th> E-mail </th><th> Contraseña </th><th> Tipo </th><tr></thead>
+                <thead><tr><th> Usuario </th><th> Apellidos </th><th> E-mail </th><th> Tipo </th><tr></thead>
                 <tbody>
 HTML;
             while($fila = mysqli_fetch_row($resultado)){
@@ -145,15 +145,17 @@ HTML;
                             <fieldset>
                                 <legend>Introduzca sus credenciales</legend>
                                         Usuario: <br> <br>
-                                        <input type="text" name="usuario"/>
+                                        <input type="text" name="usuario" value="root"/>
                                         <br> <br>
                                         Contraseña: <br> <br>
-                                        <input type="password" name="passwd"/> 
+                                        <input type="password" name="passwd" value="root"/> 
                                         <br> <br>
                             </fieldset>
                             <br>
                             <input type="submit" name="envio" value="Enviar"/>
                         </form>
+                        <p> * admin: root, contraseña: root </p>
+                        <p> * user: user, contraseña: user </p>
                     </body>
                     </html>
 HTML;

@@ -4,9 +4,10 @@
         // Creamos el recurso
         $curl = curl_init(); 
 
-        $nombre = urlencode($_GET['nombre']);
+        $nombre = htmlentities($_GET['nombre']);
+        $libro= urlencode($nombre);
 
-        $url = "http://bencore.ugr.es/iii/encore/search?formids=target&lang=spi&suite=def&reservedids=lang%2Csuite&submitmode=&submitname=&target=$nombre";
+        $url = "http://bencore.ugr.es/iii/encore/search?formids=target&lang=spi&suite=def&reservedids=lang%2Csuite&submitmode=&submitname=&target=$libro";
 
         // Establecemos las opciones
         curl_setopt($curl, CURLOPT_URL, $url);
@@ -18,7 +19,7 @@
         
         preg_match_all('{<a id="recordDisplayLink2Component\w*[0-9]*" href=".*">\s*(.*)<\/a><\/span>\s*<span class="title">\s*<span class="additionalFields customSecondaryText">(.*)</span>}', $output, $array);
       
-        echo "Busqueda realizada con nombre: ", $_GET['nombre'],", mostrando ", (count($array[1])), " libros y autores:";
+        echo "Busqueda realizada con nombre: ", $libro,", mostrando ", (count($array[1])), " libros y autores:";
         echo "<br><br>"; 
         
         for($i = 0; $i < count($array[1]); $i++){

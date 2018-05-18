@@ -3,24 +3,21 @@
 
     $db = BD_conexion();
 
-    if(isset($_POST['accionBD'])){
-        $db = get_db();
+    if(isset($_POST['accionBD']) && (isset($_POST['crearusuario']) || isset($_POST['modificarusuario']) || isset($_POST['borrarusuario']))){
         if(isset($_POST['crearusuario']))
             BD_CrearUsuario($db,$_POST);
         elseif(isset($_POST['modificarusuario']))
             BD_ModificarUsuario($db,$_POST);
         elseif(isset($_POST['borrarusuario']))
             BD_BorrarUsuario($db,$_POST);
-
-        //Volver a la pagina de logged
     }else{
-        if(isset($_POST['entrarBD'])){
+        if(isset($_POST['entrarBD']) || isset($_POST['logout'])){
             if(isset($_POST['crear']))
-                CrearUsuario(false);
+                CrearUsuario(false,null);
             elseif (isset($_POST['modificar']))
-                ModificarUsuario(false);
+                ModificarUsuario($db,false);
             elseif (isset($_POST['borrar']))
-                BorrarUsuario(false);
+                BorrarUsuario($db,false);
             elseif(isset($_POST['logout']))
                 Logout();
         }else{

@@ -1,11 +1,6 @@
 <?php
     require_once("credenciales.php");
 
-    function verificar_passwd($bdpasswd,$inputpasswd){
-        // HASH
-        return ($bdpasswd == $inputpasswd);
-    }
-
     // Funciones de BBDD
     function BD_conexion(){
         static $foo_called = false;
@@ -28,26 +23,84 @@
         $consulta = sprintf("SELECT nombre FROM usuarios WHERE nombre = '%s';", mysqli_real_escape_string($db, $post["nombre"]));
         $resultado = mysqli_fetch_assoc(mysqli_query($db,$consulta));
         
-        if($resultado['nombre'] == $post['nombre']){
-            CrearUsuario(true);
+        if($resultado['nombre'] == $post['nombre'] && !empty($post['nombre'])){
+            CrearUsuario(true,$post);
         }else{
-            $consulta = sprintf("INSERT INTO usuarios(nombre,apellido,email,passwd,tipo) VALUE ('%s','%s','%s','%s','%s');", 
-                                mysqli_real_escape_string($db, $post["nombre"]), 
-                                mysqli_real_escape_string($db, $post["apellido"]), 
-                                mysqli_real_escape_string($db, $post["email"]), 
-                                mysqli_real_escape_string($db, $post["passwd"]), 
-                                mysqli_real_escape_string($db, $post["tipo"]));
-            $resultado = mysqli_query($db, $consulta);
-            mensaje_correcto(1);
+            if(!empty($post['nombre']) && !empty($post['apellido']) && !empty($post['email']) && !empty($post['passwd']) && !empty($post['tipo'])){
+
+                $consulta = sprintf("INSERT INTO usuarios(nombre,apellido,email,passwd,tipo) VALUES ('%s','%s','%s','%s',%d);", 
+                            mysqli_real_escape_string($db, $post["nombre"]), 
+                            mysqli_real_escape_string($db, $post["apellido"]),  
+                            mysqli_real_escape_string($db, $post["email"]),  
+                            password_hash($post["passwd"], PASSWORD_DEFAULT),  
+                            mysqli_real_escape_string($db, $post["tipo"]));
+
+                $resultado = mysqli_query($db, $consulta);
+                mensaje_correcto(1);
+            }else{
+                CrearUsuario(false,$post);
+            }
         }
     }
 
-    function BD_ModificarUsuario($db){
-        echo "modificar usuario";
+    function BD_ModificarUsuario($db, $post){
+        $consulta = sprintf("SELECT nombre FROM usuarios WHERE nombre = '%s';", mysqli_real_escape_string($db, $post["nombre"]));
+        $resultado = mysqli_fetch_assoc(mysqli_query($db,$consulta));
+        
+        if($resultado['nombre'] == $post['nombre'] && !empty($post['nombre'])){
+            ModificarUsuario($db,true);
+        }else{
+            $consulta = sprintf("SELECT * FROM usuarios WHERE nombre = '%s';", mysqli_real_escape_string($db, $post["seleccionado"]));
+            $resultado = mysqli_fetch_assoc(mysqli_query($db,$consulta));
+            if(empty($post['nombre']))
+                $nombre = $resultado['nombre'];
+            else
+                $nombre = $post['nombre'];
+             
+            if(empty($post['apellido']))
+                $apellido = $resultado['apellido'];
+            else
+                $apellido = $post['apellido'];
+
+            if(empty($post['email']))
+                $email = $resultado['email'];
+            else
+                $email = $post['email'];
+
+            if(empty($post['passwd']))
+                $passwd = $resultado['passwd'];
+            else
+                $passwd = password_hash($post['passwd'], PASSWORD_DEFAULT);
+
+            if(empty($post['tipo']))
+                $tipo = $resultado['tipo'];
+            else
+                $tipo = $post['tipo'];
+
+            $consulta = sprintf("UPDATE usuarios SET nombre='%s', apellido='%s', email='%s', passwd='%s', tipo=%d WHERE nombre = '%s';", 
+                                mysqli_real_escape_string($db, $nombre),   
+                                mysqli_real_escape_string($db, $apellido),  
+                                mysqli_real_escape_string($db, $email),  
+                                $passwd,  
+                                mysqli_real_escape_string($db, $tipo), 
+                                $post["seleccionado"]);
+                                
+            $resultado = mysqli_query($db, $consulta);
+            mensaje_correcto(2);
+        }
     }
 
-    function BD_BorrarUsuario($db){
-        echo "borrar usuario";
+    function BD_BorrarUsuario($db, $post){
+        $consulta = sprintf("SELECT nombre FROM usuarios WHERE nombre = '%s';", mysqli_real_escape_string($db, $post["nombre"]));
+        $resultado = mysqli_fetch_assoc(mysqli_query($db,$consulta));
+        
+        if(!$resultado){
+            BorrarUsuario($db,true);
+        }else{
+            $consulta = sprintf("DELETE FROM usuarios WHERE nombre = '%s'", mysqli_real_escape_string($db, $post["nombre"]));
+            $resultado = mysqli_query($db, $consulta);
+            mensaje_correcto(3);
+        }
     }
 
     function BD_ListarUsuarios($db){
@@ -60,10 +113,10 @@
                 <tbody>
 HTML;
             while($fila = mysqli_fetch_row($resultado)){
-                if($fila['4'] == 0)
-                    echo "<tr><td>", $fila['0'] ,"</td><td>", $fila['1'] ,"</td><td>", $fila['2'] ,"</td><td>", $fila['3'] ,"</td><td> usuario </td></tr>";
+                if($fila['4'] == 1)
+                    echo "<tr><td>", $fila['0'] ,"</td><td>", $fila['1'] ,"</td><td>", $fila['2'] ,"</td><td> usuario </td></tr>";
                 else
-                    echo "<tr><td>", $fila['0'] ,"</td><td>", $fila['1'] ,"</td><td>", $fila['2'] ,"</td><td>", $fila['3'] ,"</td><td> administrador </td></tr>";
+                    echo "<tr><td>", $fila['0'] ,"</td><td>", $fila['1'] ,"</td><td>", $fila['2'] ,"</td><td> administrador </td></tr>";
             }
         echo <<<HTML
                 </tbody>
@@ -94,7 +147,7 @@ HTML;
                                         Usuario: <br> <br>
                                         <input type="text" name="usuario"/>
                                         <br> <br>
-                                        Password: <br> <br>
+                                        Contraseña: <br> <br>
                                         <input type="password" name="passwd"/> 
                                         <br> <br>
                             </fieldset>
@@ -107,20 +160,25 @@ HTML;
     }
 
     function Logged($db){
-        if(isset($_SESSION["nombre"]) && isset($_SESSION["passwd"])){
-            $consulta = sprintf("SELECT passwd FROM usuarios WHERE nombre = '%s';", mysqli_real_escape_string($db, $_SESSION['nombre']));
-            $resultado = mysqli_fetch_assoc(mysqli_query($db,$consulta));
+       
+        if(isset($_SESSION['nombre']) && isset($_SESSION['passwd'])){
+            $verificado = true;
         }else{
-            $_SESSION['nombre'] = $_POST['usuario'];
-            $_SESSION['passwd'] = $_POST['passwd'];
-            $consulta = sprintf("SELECT passwd FROM usuarios WHERE nombre = '%s';", mysqli_real_escape_string($db, $_SESSION['nombre']));
-            $resultado = mysqli_fetch_assoc(mysqli_query($db,$consulta));
+            $consulta = sprintf("SELECT passwd FROM usuarios WHERE nombre = '%s';", mysqli_real_escape_string($db, $_POST['usuario']));
+            $resultado = mysqli_fetch_assoc(mysqli_query($db, $consulta));
+            if($resultado && password_verify($_POST['passwd'], $resultado['passwd'])){
+                $_SESSION['nombre'] = $_POST['usuario'];
+                $_SESSION['passwd'] = $_POST['passwd'];
+                $verificado = true;
+            }else{
+                $verificado = false;
+            }
         }
-
-        if($resultado && verificar_passwd($resultado['passwd'],$_SESSION['passwd'])){
+            
+        if($verificado){
             $consulta = sprintf("SELECT tipo FROM usuarios WHERE nombre = '%s';", mysqli_real_escape_string($db, $_SESSION['nombre']));
             $resultado = mysqli_fetch_assoc(mysqli_query($db,$consulta));
-            if($resultado['tipo'] == 1){
+            if($resultado['tipo'] == 2){
 echo <<<HTML
                     <!DOCTYPE html>
                     <!-- Ejemplo de página web -->
@@ -140,7 +198,7 @@ HTML;
                             echo "<br>";
                 echo <<<HTML
                             <form action="index.php" method="POST">
-                                <input type="hidden" name="entrarBD" value=""> 
+                                <input type="hidden" name="entrarBD"> 
                                 <input type="submit" name="crear" value="Crear Usuario"/> <br> <br>
                                 <input type="submit" name="modificar" value="Modificar Usuarios"/> <br> <br>
                                 <input type="submit" name="borrar" value="Borrar Usuario"/> <br> <br>
@@ -195,7 +253,7 @@ HTML;
                     <body>
                         <form action="index.php" method="POST">
                             <p style="color:red;">Usuario o contraseña incorrectas</p>
-                            <br> <br>
+                            <br>
                             <fieldset>
                                 <legend>Introduzca sus credenciales</legend>
                                         Usuario: <br> <br>
@@ -214,7 +272,7 @@ HTML;
         }
     }
 
-    function CrearUsuario($fallo){
+    function CrearUsuario($fallo,$post){
         echo <<<HTML
             <!DOCTYPE html>
             <!-- Ejemplo de página web -->
@@ -236,33 +294,76 @@ HTML;
                     <form action="index.php" method="POST">
                         <p>Rellene los campos para crear un usuario</p>
                         Nombre: <br> <br>
-                        <input type="text" name="nombre"/>
-                        <br> <br>
+HTML;
+                        if(empty($post['nombre']) && !is_null($post)){
+                            echo '<input type="text" name="nombre"/>';
+                            echo '<p style="color:red;">Campo vacio</p>';
+                        }else{
+                            if(is_null($post)){
+                                echo '<input type="text" name="nombre"/>';
+                                echo '<br> <br>';
+                            }else{
+                                echo '<input type="text" name="nombre" value="', $post['nombre'], '"/>';
+                                echo "<br> <br>";
+                            }
+                        }
+            echo<<<HTML
                         Apellidos: <br> <br>
-                        <input type="text" name="apellido"/> 
-                        <br> <br>
+HTML;
+                        if(empty($post['apellido']) && !is_null($post)){
+                            echo '<input type="text" name="apellido"/>';
+                            echo '<p style="color:red;">Campo vacio</p>';
+                        }else{
+                            if(is_null($post)){
+                                echo '<input type="text" name="apellido"/>';
+                                echo '<br> <br>';
+                            }else{
+                                echo '<input type="text" name="apellido" value="', $post['apellido'], '"/>';
+                                echo "<br> <br>";
+                            }
+                        }
+            echo<<<HTML
                         Email: <br> <br>
-                        <input type="email" name="email"/> 
-                        <br> <br>
+HTML;
+                        if(empty($post['email']) && !is_null($post)){
+                            echo '<input type="email" name="email"/>';
+                            echo '<p style="color:red;">Campo vacio</p>';
+                        }else{
+                            if(is_null($post)){
+                                echo '<input type="email" name="email"/>';
+                                echo '<br> <br>';
+                            }else{
+                                echo '<input type="email" name="email" value="', $post['email'], '"/>';
+                                echo "<br> <br>";
+                            }
+                        }
+            echo<<<HTML
                         Contraseña: <br> <br>
-                        <input type="password" name="passwd"/> 
-                        <br> <br>
+HTML;
+                        if(empty($post['passwd']) && !is_null($post)){
+                            echo '<input type="password" name="passwd"/>';
+                            echo '<p style="color:red;">Campo vacio</p>';
+                        }else{
+                            echo '<input type="password" name="passwd"/>';
+                            echo "<br> <br>";
+                        }
+            echo<<<HTML
                         Tipo de usuario: <br> <br>
                         <select name="tipo">
-                            <option value="usuario" selected>usuario</option>
-                            <option value="admin">administrador</option>
+                            <option value="1" selected>usuario</option>
+                            <option value="2">administrador</option>
                         </select>
                         <br> <br>
-                        <input type="hidden" name="accionBD" value="">
+                        <input type="hidden" name="accionBD">
                         <br> <br>
-                        <input type="submit" name="crearusuario" value="Crear Usuario"/>
+                        <input type="submit" name="crearusuario" value="Crear Usuario"/> <input type="submit" name="envio" value="Volver"/>
                     </form>
                 </body>
                 </html>
 HTML;
     }
 
-    function ModificarUsuario(){
+    function ModificarUsuario($db,$fallo){
         echo <<<HTML
             <!DOCTYPE html>
             <!-- Ejemplo de página web -->
@@ -277,10 +378,25 @@ HTML;
                 </head>
 
                 <body>
+HTML;
+                    if($fallo)
+                        echo '<p style="color:red;">Usuario ya existente</p>';
+            echo<<<HTML
                     <form action="index.php" method="POST">
                         <p>Seleccione el usuario a modificar</p>
-                        <!-- RadioButton -->
-                        <p> Introduzca los nuevos campos: </p>
+HTML;
+                        $consulta = "SELECT * FROM usuarios;";
+                        $resultado = mysqli_query($db,$consulta);
+                        $p = true;
+                        while($fila = mysqli_fetch_row($resultado)){
+                            if($p){
+                                echo '<label><input type="radio" name="seleccionado" value="', $fila['0'], '" checked/> ', $fila['0'] ," </label> <br> <br>";
+                                $p = false;
+                            }else
+                                echo '<label><input type="radio" name="seleccionado" value="', $fila['0'], '"/> ', $fila['0'] ," </label> <br> <br>";
+                        }
+            echo<<<HTML
+                        <p> Introduzca los nuevos campos, dejar en blanco para no modificar: </p>
                         Nombre: <br> <br>
                         <input type="text" name="nombre"/>
                         <br> <br>
@@ -295,19 +411,19 @@ HTML;
                         <br> <br>
                         Tipo de usuario: <br> <br>
                         <select name="tipo">
-                            <option value="usuario" selected>usuario</option>
-                            <option value="admin">administrador</option>
+                            <option value="1" selected>usuario</option>
+                            <option value="2">administrador</option>
                         </select>
-                        <input type="hidden" name="accionBD" value="">
+                        <input type="hidden" name="accionBD">
                         <br> <br>
-                        <input type="submit" name="modificarusuario" value="Modificar Usuario"/>
+                        <input type="submit" name="modificarusuario" value="Modificar Usuario"/> <input type="submit" name="envio" value="Volver"/>
                     </form>
                 </body>
                 </html>
 HTML;
     }
 
-    function BorrarUsuario(){
+    function BorrarUsuario($db,$fallo){
         echo <<<HTML
             <!DOCTYPE html>
             <!-- Ejemplo de página web -->
@@ -324,10 +440,21 @@ HTML;
                 <body>
                     <form action="index.php" method="POST">
                         <p>Seleccione el usuario a borrar:</p>
-                        <!--Radio Buttons-->
-                        <input type="hidden" name="accionBD" value="">
+HTML;
+                        $consulta = "SELECT * FROM usuarios;";
+                        $resultado = mysqli_query($db,$consulta);
+                        $p = true;
+                        while($fila = mysqli_fetch_row($resultado)){
+                            if($p){
+                                echo '<label><input type="radio" name="nombre" value="', $fila['0'], '" checked/> ', $fila['0'] ," </label> <br> <br>";
+                                $p = false;
+                            }else
+                                echo '<label><input type="radio" name="nombre" value="', $fila['0'], '"/> ', $fila['0'] ," </label> <br> <br>";
+                        }
+            echo<<<HTML
+                        <input type="hidden" name="accionBD">
                         <br><br>
-                        <input type="submit" name="borrarusuario" value="Borrar Usuario"/>
+                        <input type="submit" name="borrarusuario" value="Borrar Usuario"/> <input type="submit" name="envio" value="Volver"/>
                     </form>
                 </body>
                 </html>
@@ -360,8 +487,7 @@ HTML;
                             if($value == 3)
                                 echo "<p> Usuario borrado con éxito </p>";
             echo <<<HTML
-                            <input type="submit" name="envio" value="Volver"/> <br> <br>
-                            <input type="submit" name="logout" value="Logout"/> 
+                            <input type="submit" name="envio" value="Volver"/> <input type="submit" name="logout" value="Logout"/> 
                         </form>
                     </body>
                     </html>
@@ -369,6 +495,17 @@ HTML;
     }
 
     function Logout(){
+        if(session_status() == PHP_SESSION_NONE)
+            session_start();
+        
+        session_unset();
+        $param = session_get_cookie_params();
 
+        setcookie(session_name(), $_COOKIE[session_name()], time() - 100000, 
+        $param['path'], $param['domain'], $param['secure'], $param['httponly']);
+        session_destroy();
+
+        $url = "https://void.ugr.es/~ftm19971718/p4/4.4/index.php";
+        header('Location: '.$url);
     }
 ?>

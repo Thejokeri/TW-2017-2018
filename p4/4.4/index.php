@@ -4,6 +4,7 @@
     $db = BD_conexion();
 
     if(isset($_POST['accionBD'])){
+        $db = get_db();
         if(isset($_POST['crearusuario']))
             BD_CrearUsuario($db,$_POST);
         elseif(isset($_POST['modificarusuario']))

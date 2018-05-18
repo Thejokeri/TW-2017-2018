@@ -8,16 +8,20 @@
 
     // Funciones de BBDD
     function BD_conexion(){
-        $db = mysqli_connect(DB_HOST,DB_USER,DB_PASSWD,DB_DATABASE);
+        static $foo_called = false;
+        if (!$foo_called) {
+            $foo_called = true;
+            $db = mysqli_connect(DB_HOST,DB_USER,DB_PASSWD,DB_DATABASE);
         
-        session_start();
-        
-        if(!$db){
-            return "Error de conexión a la base de datos (".mysqli_connect_errno(). ") : ".mysqli_connect_error();
-        }
+            session_start();
 
-        mysqli_set_charset($db,"utf8");
-        return $db;
+            if(!$db){
+                return "Error de conexión a la base de datos (".mysqli_connect_errno(). ") : ".mysqli_connect_error();
+            }
+
+            mysqli_set_charset($db,"utf8");
+            return $db;
+        }
     }
     
     function BD_CrearUsuario($db, $post){
@@ -103,14 +107,18 @@ HTML;
     }
 
     function Logged($db){
-        $_SESSION["nombre"] = $_POST['usuario'];
-        $_SESSION["passwd"] = $_POST['passwd'];
+        if(isset($_SESSION["nombre"]) && isset($_SESSION["passwd"])){
+            $consulta = sprintf("SELECT passwd FROM usuarios WHERE nombre = '%s';", mysqli_real_escape_string($db, $_SESSION['nombre']));
+            $resultado = mysqli_fetch_assoc(mysqli_query($db,$consulta));
+        }else{
+            $_SESSION['nombre'] = $_POST['usuario'];
+            $_SESSION['passwd'] = $_POST['passwd'];
+            $consulta = sprintf("SELECT passwd FROM usuarios WHERE nombre = '%s';", mysqli_real_escape_string($db, $_SESSION['nombre']));
+            $resultado = mysqli_fetch_assoc(mysqli_query($db,$consulta));
+        }
 
-        $consulta = sprintf("SELECT passwd FROM usuarios WHERE nombre = '%s';", mysqli_real_escape_string($db, $_SESSION["nombre"]));
-        $resultado = mysqli_fetch_assoc(mysqli_query($db,$consulta));
-
-        if($resultado && verificar_passwd($resultado['passwd'],$_SESSION["passwd"])){
-            $consulta = sprintf("SELECT tipo FROM usuarios WHERE nombre = '%s';", mysqli_real_escape_string($db, $_SESSION["nombre"]));
+        if($resultado && verificar_passwd($resultado['passwd'],$_SESSION['passwd'])){
+            $consulta = sprintf("SELECT tipo FROM usuarios WHERE nombre = '%s';", mysqli_real_escape_string($db, $_SESSION['nombre']));
             $resultado = mysqli_fetch_assoc(mysqli_query($db,$consulta));
             if($resultado['tipo'] == 1){
 echo <<<HTML

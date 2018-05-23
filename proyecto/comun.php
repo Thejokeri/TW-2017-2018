@@ -32,10 +32,10 @@ HTML;
                             echo "<li".($k==$value?" class='active'":"").">"."<a href='".$links[$k]."'>".$v."</a></li>";
         echo <<<HTML
                                         <li id="right">
-                                            <a href="index.php?login=0">Login</a>
+                                            <a href="index.php?register=0">Register</a>
                                         </li>
                                         <li id="right">
-                                            <a href="index.php?register=0">Register</a>
+                                            <a href="index.php?login=0">Login</a>
                                         </li>
                                     </ul>
                                 </nav>
@@ -46,19 +46,18 @@ HTML;
     function aside(){
         echo <<<HTML
             <aside class="aside-grid">
-                hola
-                <!--<form action="busqueda.php" method="POST">
-                    <input type="text" name="discografia_search" placeholder="Buscar un disco, una canción o poner dos fechas"/>
-                    <input type="submit" name="discografia_searchbutton" value="Enviar"/>
-                </form>
-
-                <form action="busqueda.php" method="POST">
-                    <select name="conciertos_search" multiple>
-                        
-                    </select>
-                    <br>
-                    <input type="submit" name="conciertos_searchbutton" value="Enviar"/>
-                </form>-->
+                <span><form action="busqueda.php" method="POST">
+                    <span><label>Buscar un disco, una canción o poner dos fechas: <input class="search" type="text" name="discografia_search"/></label></span>
+                    <span><input type="submit" name="discografia_searchbutton" value="Buscar"/></span>
+                </form></span>
+                
+                <span><form action="busqueda.php" method="POST">
+                    <span><label> Selecciona una concierto:<select name="conciertos_search" multiple>
+                        <option> Alive 1997 </option>
+                        <option> Alive 2006/2007 </option>
+                    </select></label></span>
+                    <span><input type="submit" name="conciertos_searchbutton" value="Mostrar Gira"/></span>
+                </form></span>
             </aside>
 HTML;
         /*  Edicion del archivo
@@ -68,10 +67,10 @@ HTML;
 
     function select_fechatarjeta(){
         echo <<<HTML
-                    Fecha de caducidad y código de seguridad: <br> <br>
+                    <label>Fecha de caducidad y código de seguridad: 
 HTML;
                     echo <<<HTML
-                                <select name="mestarjeta">
+                                <span><select name="mestarjeta">
                                     <option value="" selected>--</option>
 HTML;
                                 for($i = 1; $i <= 12; $i++)
@@ -88,8 +87,7 @@ HTML;
                                     echo '<option value="',$i,'">',$i,'</option>';
 
                     echo <<<HTML
-                                </select>
-                                <br> <br>
+                                </select></span></label>
 HTML;
     }
 
@@ -101,21 +99,58 @@ HTML;
                 echo <<<HTML
                     <main class="main-grid">
                         <article>
-                            <h1> Lorem ipusum </h1>
-                            <p> Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum 
-                                Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum
-                                Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum 
-                                Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum 
-                                Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum 
-                                Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum 
-                                Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum 
-                                Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum 
-                                Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum 
-                                Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum 
-                                Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum 
-                                Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum  
-                                Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum Lorem ipusum 
-                            </p>
+                            <h1> Home </h1>
+                            <span><p> 
+                                Daft Punk es un dúo de productores formado por los músicos franceses Guy-Manuel 
+                                de Homem-Christo (n. 1974) y Thomas Bangalter (n. 1975).4​5​6​ Daft Punk alcanzó 
+                                una gran popularidad en el estilo house a finales de la década de los 90 en Francia 
+                                y continuó con su éxito los años siguientes, usando el estilo synthpop.4​5​7​ El dúo 
+                                también es acreditado por la producción de canciones que se consideran esenciales en 
+                                el estilo french house. 
+                            </p></span>
+
+                            <img id="main" src="./img/img2" alt="Cascos"/>
+
+                            <span><p> 
+                                El acrónimo "Daft", presente en su primer DVD, proviene de las iniciales de "A Story 
+                                about Dogs, Androids, Firemen and Tomatoes". Estas palabras reciben significado al dúo 
+                                musical por su primera canción «Da Funk» del año 1995 perteneciente al álbum Homework, 
+                                dónde aparece un perro antropomorfo como protagonista en el vídeo. Luego "Androids" por 
+                                la aparición de robots bailando en el vídeo «Around the World» del año 1997 del álbum 
+                                Homework. "Fireman" (Bomberos en español) que aparecen en el video de «Burnin'» y "Tomatoes" 
+                                por el vídeo «Revolution 909».
+                            </p></span>
+
+                            <span><p> 
+                                A principios de la carrera del grupo, los miembros de la banda estaban influidos por bandas 
+                                como The Beach Boys y The Rolling Stones. Bangalter y de Homem-Christo se encontraban originalmente 
+                                en una banda llamada Darlin', que se disolvió después de un corto periodo de tiempo, permitiendo 
+                                a los dos experimentar con música por su cuenta. El dúo se convirtió en Daft Punk, y lanzaron su 
+                                aclamado álbum debut Homework en 1997. El segundo álbum, Discovery, lanzado en 2001, fue aún más 
+                                exitoso, impulsado por los sencillos «One More Time», «Digital Love» y «Harder, Better, Faster, 
+                                Stronger». En marzo de 2005, el dúo lanzó el álbum Human After All, recibiendo críticas mixtas. 
+                                Sin embargo, «Robot Rock» y «Technologic» tuvieron éxito en el Reino Unido. Daft Punk hizo una gira 
+                                a lo largo de 2006 y 2007 y lanzó su álbum en vivo Alive 2007, el cual ganó un Grammy al Mejor 
+                                Álbum de Electrónica/Dance. El dúo compuso la música para la película Tron: Legacy y en 2010 lanzó 
+                                el álbum de la banda sonora de la película.
+                            </p></span>
+
+                            <img id="main" src="./img/img1" alt="Daft Punk con Giorgio Moroder"/>
+
+                            <span><p> 
+                                Daft Punk es conocido por sus elaborados conciertos en los que incorporan efectos visuales, por el 
+                                énfasis que ponen en la historia y los componentes visuales de sus producciones musicales. También 
+                                porque desde 2001 en sus actuaciones o apariciones públicas aparecen disfrazados de robot. En muy 
+                                raras ocasiones conceden entrevistas o aparecen en televisión.
+                            </p></span>
+
+                            <span><p> 
+                                El dúo ha vendido más de 12 millones de álbumes, y más de 17 millones de sencillos.
+                            </p></span>
+                        </article>
+
+                        <article>
+                            <h1> Componentes </h1>
                         </article>
                     </main>
 HTML;
@@ -217,7 +252,7 @@ HTML;
                             <footer class="footer-grid">
                                 <ul>
                                     <li><a>© 2018 Copyright</a></li>
-                                    <li><a>Designed and built by Thejoker</a></li>
+                                    <li><a>Designed by Thejoker</a></li>
                                 </ul>
                             </footer>
                         </body>

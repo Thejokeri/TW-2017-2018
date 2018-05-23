@@ -21,7 +21,6 @@ body, button, a, a:hover,
 label, ul li a, div, img, *{
   cursor: url(./img/cursor.png),auto;
 }
-/*font-family: Kabel-W02-regular;*/
 
 @font-face {
     font-family: "myfont";
@@ -40,8 +39,17 @@ h1 {
     padding-top: 0;
 }
 
-p, li, a {
+p, li, a, label {
     font-family: myfont;
+}
+
+label {
+    font-size: 16px;
+}
+
+span {
+    display: block;
+    padding: 5%;
 }
 
 .grid {
@@ -99,7 +107,6 @@ body > * {
 }
 
 nav ul {
-    position: fixed;
     list-style-type: none;
     margin: 0;
     padding: 0;
@@ -144,13 +151,27 @@ header img{
 }
 
 main {
-    display: flex;
+    display: inline;
     align-content: center;
     padding: 10%;
+    padding-top: 0;
+}
+
+main > * {
+    padding: 4%;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+img#main {
+    width: 70%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 aside {
-    display: flex;
+    display: inline-block;
     align-content: right;
     padding: 10%;
 }

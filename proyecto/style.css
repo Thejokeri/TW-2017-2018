@@ -88,7 +88,7 @@ span {
     .grid {
         display: grid;
         grid-template-columns: 1fr 750px 200px 1fr;
-        grid-template-rows: 5% 10% 100% 5%;
+        grid-template-rows: 5% 10% 100% 100%;
         grid-template-areas:
         ". nav nav ."  
         ". header header ." 
@@ -131,7 +131,7 @@ nav ul li a:hover:not(.active) {
 }
 
 .active {
-    background-color: #4CAF50;
+    background-color: rgb(44, 212, 156);
 }
 
 #right {
@@ -206,4 +206,3 @@ footer ul li a {
     max-width: 100%;
     font-size: 80%;
 }
-

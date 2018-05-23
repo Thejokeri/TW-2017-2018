@@ -2,7 +2,7 @@
 
     // Encabezado de los HTMLs
     function Encabezado($value){
-        $items = ["Home", "Biografía", "Discografía", "Tienda"];
+        $items = ["Home", "Biografía", "Discografía", "Conciertos"];
         $links = ["index.php?id=0", "index.php?id=1", "index.php?id=2", "index.php?id=3"];
         echo <<<HTML
                         <!DOCTYPE html>

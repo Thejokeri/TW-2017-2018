@@ -1,6 +1,0 @@
-<?php 
-DEFINE('DB_HOST','localhost'); 
-DEFINE('DB_USER','ftm19971718'); 
-DEFINE('DB_PASSWD','vpUQhIjf'); 
-DEFINE('DB_DATABASE','ftm19971718');
-?>

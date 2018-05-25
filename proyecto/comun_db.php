@@ -1,4 +1,5 @@
 <?php
+
     require_once("credenciales.php");
 
     // Funciones de BBDD
@@ -122,6 +123,43 @@ HTML;
                 </tbody>
             </table>
 HTML;
+    }
+
+    function BD_ListarConciertos($db){
+        $consulta = "SELECT * FROM concierto;";
+        $resultado = mysqli_query($db,$consulta);
+
+        $nombre = null;
+        $mostrar = false;
+        
+        while($fila = mysqli_fetch_row($resultado)){
+            if($fila['4'] != $nombre){
+                $nombre = $fila['4'];
+                echo "<span><h1>$nombre</h1></span>";
+                $mostrar = true;
+            }
+            echo "<span><table>";
+            if($mostrar)
+                echo "<tr><th> Fecha </th><th> País </th><th> Ciudad </th><th> Lugar </th><tr>";
+            $newDate = date("d-m-Y", strtotime($fila['0']));
+            echo "<tr><td>", $newDate, "</td><td>", $fila['1'], "</td><td>", $fila['2'], "</td><td>", $fila['3'], "</td></tr>";
+            echo "</table></span> <span><p>";
+            echo $fila['5'];
+            echo "</p></span>";
+            $mostrar = false;
+        }
+    }
+
+    function BD_ListarAlbum($db){
+        $consulta = "SELECT * FROM album;";
+        $resultado = mysqli_query($db,$consulta);
+
+        echo '<ul  class="image_album">';
+        while($fila = mysqli_fetch_row($resultado)){
+            echo "<li>", '<a href="index.php?disco='.$fila['nombre']."</a>", '<img src="data:image/jpeg;base64,'.base64_encode( $fila['5'] ).'"/>',"</li>";
+        }
+
+        echo "</ul>";
     }
 
     // Funciones HTML
@@ -510,4 +548,5 @@ HTML;
         $url = "https://void.ugr.es/~ftm19971718/p4/4.4/index.php";
         header('Location: '.$url);
     }
+
 ?>

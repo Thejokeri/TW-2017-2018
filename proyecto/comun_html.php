@@ -1,9 +1,11 @@
 <?php
 
+    require "comun_db.php";
+
     // Encabezado de los HTMLs
     function Encabezado($value){
-        $items = ["Home", "Biografía", "Discografía", "Conciertos"];
-        $links = ["index.php?id=0", "index.php?id=1", "index.php?id=2", "index.php?id=3"];
+        $items = ["Home", "Biografía", "Discografía", "Conciertos", "Register", "Login"];
+        $links = ["index.php?id=0", "index.php?id=1", "index.php?id=2", "index.php?id=3", "index.php?id=4", "index.php?id=5"];
         echo <<<HTML
                         <!DOCTYPE html>
                         <!-- Ejemplo de página web -->
@@ -28,31 +30,30 @@ echo <<< HTML
                                     <ul>
 HTML;
                         // Genero el nav y activo el <a>
-                        foreach ($items as $k => $v)
-                            echo "<li".($k==$value?" class='active'":"").">"."<a href='".$links[$k]."'>".$v."</a></li>";
+                        foreach ($items as $k => $v){
+                            if($k == 4 || $k == 5)
+                                echo '<li id="right"'.($k==$value?" class='active'":"").">"."<a href='".$links[$k]."'>".$v."</a></li>";
+                            else
+                                echo "<li".($k==$value?" class='active'":"").">"."<a href='".$links[$k]."'>".$v."</a></li>";
+                        }
         echo <<<HTML
-                                        <li id="right">
-                                            <a href="index.php?register=0">Register</a>
-                                        </li>
-                                        <li id="right">
-                                            <a href="index.php?login=0">Login</a>
-                                        </li>
                                     </ul>
                                 </nav>
 HTML;
     }
 
     // Aside 
-    function aside(){
+    function Aside(){
         echo <<<HTML
             <aside class="aside-grid">
                 <span><form action="busqueda.php" method="POST">
-                    <span><label>Buscar un disco, una canción o poner dos fechas: <input class="search" type="text" name="discografia_search"/></label></span>
+                    <span><label>Buscar un disco o una canción <input type="text" name="discografia_search"/></label></span>
                     <span><input type="submit" name="discografia_searchbutton" value="Buscar"/></span>
                 </form></span>
                 
                 <span><form action="busqueda.php" method="POST">
-                    <span><label> Selecciona una concierto:<select name="conciertos_search" multiple>
+                    <span><label> Selecciona una concierto:
+                    <select name="conciertos_search" multiple>
                         <option> Alive 1997 </option>
                         <option> Alive 2006/2007 </option>
                     </select></label></span>
@@ -60,7 +61,8 @@ HTML;
                 </form></span>
             </aside>
 HTML;
-        /*  Edicion del archivo
+        /*  
+            Edicion del archivo
             Gestor de compras
         */
     }
@@ -92,7 +94,7 @@ HTML;
     }
 
     // El contenido del main de cada página
-    function content($value){
+    function Content($value,$db){
         switch($value){
             // Home
             case 0:
@@ -151,6 +153,8 @@ HTML;
 
                         <article>
                             <h1> Componentes </h1>
+
+                            
                         </article>
                     </main>
 HTML;
@@ -171,105 +175,84 @@ HTML;
             case 2:
                 echo <<<HTML
                     <main class="main-grid">
+HTML;
+                        if(isset($_GET['disco'])){
+                            echo "<article>";
+                            BD_ListarCanciones();
+                            echo "</article>";
+                        }else{
+                            echo "<article>";
+                            // Listamos los albumes de la Base de datos
+                            BD_ListarAlbum($db);
+                            echo "</article>";
+                        }
+            echo <<<HTML
+                    </main>
+HTML;
+            break;
+
+            // Conciertos
+            case 3:
+                echo <<<HTML
+                    <main class="main-grid">
                         <article>
-                            <table>
-                                <tr>
-                                    <th>First Name</th>
-                                    <th>Last Name</th>
-                                    <th>Points</th>
-                                </tr>
-                                <tr>
-                                    <td>Peter</td>
-                                    <td>Griffin</td>
-                                    <td>$100</td>
-                                </tr>
-                                <tr>
-                                    <td>Lois</td>
-                                    <td>Griffin</td>
-                                    <td>$150</td>
-                                </tr>
-                                <tr>
-                                    <td>Joe</td>
-                                    <td>Swanson</td>
-                                    <td>$300</td>
-                                </tr>
-                                <tr>
-                                    <td>Cleveland</td>
-                                    <td>Brown</td>
-                                    <td>$250</td>
-                                </tr>
-                            </table>
+HTML;
+                            // Listamos los conciertos de la Base de datos
+                            BD_ListarConciertos($db);
+            echo <<<HTML
+                        </article>
+                    </main> 
+HTML;
+            break;
+
+            // 
+            case 4:
+                echo <<<HTML
+                    <main class="main-grid">
+                        <article>
+                            <h1>Register</h1>
+
+                            <form action="index.php" method="POST">
+                                <span><label>Id de usuario: <input type="text" name="id"/></label></span>
+                                <span><label>Contraseña: <input type="password" name="password"/></label></span>
+                                <span><label>Nombre: <input type="text" name="nombre"/></label></span>
+                                <span><label>Apellidos: <input type="text" name="apellido"/></label></span> 
+                                <span><label>Email: <input type="email" name="email"/></label></span> 
+                                <span><label>Tipo de usuario: 
+                                <select name="tipo">
+                                    <option value="1" selected>Administrador</option>
+                                    <option value="2">Gestor de compras</option>
+                                </select></label></span>
+
+                                <!--<input type="hidden" name="accionBD">-->
+
+                                <span><input type="submit" name="signup" value="Sign up"/></span>
+                            </form>
                         </article>
                     </main>
 HTML;
             break;
 
-            // Tienda
-            case 3:
+            case 5:
                 echo <<<HTML
                     <main class="main-grid">
                         <article>
-                            <h2>Tienda</h2>
-                            
-                            <!-- Añadir los albumes y el tipo de tarjeta y checkbox -->
+                            <h1>Login</h1>
+
                             <form action="index.php" method="POST">
-                                <fieldset>
-                                    <legend>Merchandise Oficial</legend>
-                                    Álbumes: <br>
-                                    <label><input type="checkbox" name="compra[]" value="homework"/> Homework</label> <br>
-                                    <label><input type="checkbox" name="compra[]" value="discovery"/> Discovery</label> <br>
-                                    <label><input type="checkbox" name="compra[]" value="human after all"/> Human After All</label> <br>
-                                    <label><input type="checkbox" name="compra[]" value="tron" /> Tron: Legacy</label> <br>
-                                    <label><input type="checkbox" name="compra[]" value="ram"/> Random Access Memories</label> <br>
-                                </fieldset>
+                                <span><label>Id de usuario: <input type="text" name="id"/></label></span>
+                                <span><label>Contraseña: <input type="password" name="password"/></label></span>
 
-                                <fieldset>
-                                    <legend>Datos personales y dirección de facturización</legend>
-                                        Nombre: <br>
-                                        <input type="text" name="nombre"/> <br> <br>
-                                        Apellidos: <br>
-                                        <input type="text" name="apellidos"/> <br> <br>
-                                        Email: <br>
-                                        <input type="email" name="email"/> <br> <br>
-                                        Teléfono: <br>
-                                        <input type="tel" name="tlf"/> <br> <br>
-                                        Código Postal: <br>
-                                        <input type="number" name="cp"/> <br> <br>
-                                </fieldset>
+                                <!--<input type="hidden" name="accionBD">-->
 
-                                <fieldset>
-                                    <legend>Método de pago</legend>
-                                        Seleccione un método de pago: <br> <br>
-                                        <label><input type="radio" name="metodopago" value="tarjeta"/> Tarjeta </label>
-                                        <label><input type="radio" name="metodopago" value="contrareembolso"/> Contra-reembolso </label>
-                                        <br> <br>
-                                        
-                                        Seleccione una tarjeta: <br>
-                                        <label><input type="radio" name="tipotarjeta" value="paypal"/> Paypal</label>
-                                        <label><input type="radio" name="tipotarjeta" value="visa"/> Visa</label>
-                                        <label><input type="radio" name="tipotarjeta" value="mastercard"/> MasterCard</label>
-                                        <label><input type="radio" name="tipotarjeta" value="americanexpress"/> American Express</label>
-                                        <br> <br>
-
-                                        Número de tarjeta: <br>
-                                        <input type="number" name="numtarjeta"/> <br> <br>
-HTML;
-                                        select_fechatarjeta();
-                    echo <<<HTML
-                                        CVC: <input type="number" min="3" name="cvc"/> <br> <br>
-                                </fieldset>
-                            
-                                <input type="submit" name="enviar" value="Enviar" /> <input type="reset" value="Limpiar formulario"/>
+                                <span><input type="submit" name="login" value="Login"/></span>
                             </form>
+
                         </article>
-                    </main> 
+                    </main>
 HTML;
             break;
         }
-
-
-
-        // Generar el formuliario de Login register 
     }
 
     // Footer

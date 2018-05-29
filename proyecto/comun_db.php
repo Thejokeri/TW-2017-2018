@@ -158,21 +158,16 @@ HTML;
     function BD_ListarAlbum($db, $consulta){
         $resultado = mysqli_query($db,$consulta);
 
-        if(mysqli_num_rows($resultado) > 0){
-            echo '<ul class="image_album">';
-            while($fila = mysqli_fetch_row($resultado)){
-                echo '<li><a href=index.php?disco=', $fila['0'], '>', '<img src="data:image/jpeg;base64,'.base64_encode( $fila['5'] ).'"/></a></li>';
-            }
-
-            echo "</ul>";
-        }else{
-            echo "<span><p>No se ha encontrado ningun resultado</p></span>";
+        echo '<ul class="image_album">';
+        while($fila = mysqli_fetch_row($resultado)){
+            echo '<li><a href=index.php?disco=', $fila['0'], '>', '<img src="data:image/jpeg;base64,'.base64_encode( $fila['5'] ).'"/></a></li>';
         }
+        echo "</ul>";
     }
 
     function BD_ListarCanciones($db,$value,$cancion){
-        $consultaralbum = 'SELECT * FROM album WHERE nombre = "'. $value.'"';
-        $consultarcancion = 'SELECT * FROM canciones WHERE nombre_album = "'.$value.'"';
+        $consultaralbum = 'SELECT DISTINCT * FROM album WHERE nombre = "'. $value.'"';
+        $consultarcancion = 'SELECT DISTINCT * FROM canciones WHERE nombre_album = "'.$value.'"';
         $resultado1 = mysqli_query($db,$consultaralbum);
         $resultado2 = mysqli_query($db,$consultarcancion);
         $cancion = "«".$cancion."»";

@@ -70,7 +70,7 @@ HTML;
 
     // Aside 
     function Aside($db){
-        $consulta = "SELECT DISTINCT nombre FROM concierto;";
+        $consulta = "SELECT DISTINCT ciudad FROM concierto;";
         $resultado = mysqli_query($db,$consulta);
 
         echo <<<HTML
@@ -191,7 +191,7 @@ HTML;
                             echo "</article>";
                 echo <<<HTML
                             <article>
-                                <form action="busqueda.php" method="POST">
+                                <form action="comprar.php" method="POST">
                                     <span><label>Nombre: <input type="text" name="nombre"/></label></span>
                                     <span><label>Apellidos: <input type="text" name="apellidos"/></label></span>
                                     <span><label>Correo electrónico: <input type="email" name="email"/></label></span>

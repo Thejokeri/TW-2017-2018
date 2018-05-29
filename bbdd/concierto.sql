@@ -46,6 +46,7 @@ INSERT INTO `concierto` (`fecha`, `pais`, `ciudad`, `lugar`, `nombre`, `textodes
 ('1997-01-22', 'Reino Unido', 'London', 'The End', 'Daftendirektour', 'Texto descriptivo'),
 ('1997-01-24', 'Reino Unido', 'Glasgow', 'The Arches Theatre (Slam Event)', 'Daftendirektour', 'Texto descriptivo'),
 ('1997-01-25', 'Reino Unido', 'Leeds', 'Showbox', 'Daftendirektour', 'Texto descriptivo'),
+('1997-11-14','España','Barcelona','Zeleste','Daftendirektour','Texto descriptivo'),
 ('2006-06-30', 'Francia', 'Belfort', 'Eurockéennes Festival', 'Alive 2006/2007', 'Texto descriptivo'),
 ('2006-07-14', 'España', 'Barcelona', 'Summercase Festival', 'Alive 2006/2007', 'Texto descriptivo'),
 ('2006-11-04', 'Argentina', 'Buenos Aires', 'Bue Festival', 'Alive 2006/2007', 'Texto descriptivo'),

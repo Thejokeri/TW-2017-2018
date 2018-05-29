@@ -7,7 +7,7 @@
         switch($value){
             // Texto de cancion o album
             case 0:
-                $consultacancion = 'SELECT * FROM canciones WHERE nombre = "«'.$_POST['search'].'»"';
+                $consultacancion = 'SELECT DISTINCT nombre_album FROM canciones WHERE nombre = "«'.$_POST['search'].'»"';
                 $nombre = str_replace(' ', '_', $_POST['search']);
                 $consultalbum = 'SELECT * FROM album WHERE nombre = "'.$nombre.'"';  
                 $resultadocancion = mysqli_query($db,$consultacancion);
@@ -18,15 +18,16 @@
                         <article>
                             <span><p>Mostrando resultado de la búsqueda: </p></span>
 HTML;
-                            if(mysqli_num_rows($resultadocancion) > 0){
-                                $fila = mysqli_fetch_row($resultadocancion);
-                                BD_ListarCanciones($db,$fila['2'],$_POST['search']);
-                            }else{
-                                if(mysqli_num_rows($resultadoalbum) > 0){
-                                    BD_ListarCanciones($db,$nombre,null);
-                                }else{
-                                    echo "<span><p>No se ha encontrado ningun resultado</p></span>";
+
+                            if(mysqli_num_rows($resultadocancion) > 0 || mysqli_num_rows($resultadoalbum) > 0){
+                                while($fila =  mysqli_fetch_row($resultadocancion)){
+                                    BD_ListarCanciones($db,$fila['0'],$_POST['search']);
                                 }
+
+                                if(mysqli_num_rows($resultadoalbum) > 0)
+                                    BD_ListarCanciones($db,$nombre,null);
+                            }else{
+                                echo "<span><p>No se ha encontrado ningun resultado</p></span>";
                             }
                 echo <<<HTML
                         </article>
@@ -42,7 +43,13 @@ HTML;
                         <article>
                             <span><p>Mostrando resultado de la búsqueda: </p></span>
 HTML;
-                            BD_ListarAlbum($db,$consulta);
+                            $resultado = mysqli_query($db,$consulta);
+                            if(mysqli_fetch_row($resultado) > 0){
+                                while($fila =  mysqli_fetch_row($resultado))
+                                    BD_ListarCanciones($db,$fila['0'],null);
+                            }else{
+                                echo "<span><p>No se ha encontrado ningun resultado</p></span>";
+                            }
                 echo <<<HTML
                         </article>
                     </main>
@@ -75,7 +82,7 @@ HTML;
             if(isset($_POST['fecha_iniciocancion']) && isset($_POST['fecha_fincancion'])){
                 $fecha_inicio = date("Y-m-d", strtotime($_POST['fecha_iniciocancion']));
                 $fecha_fin = date("Y-m-d", strtotime($_POST['fecha_fincancion']));
-                $consulta = 'SELECT * FROM album WHERE fecha >= "'.$fecha_inicio.'" and fecha <= "'.$fecha_fin.'"';
+                $consulta = 'SELECT nombre FROM album WHERE fecha >= "'.$fecha_inicio.'" and fecha <= "'.$fecha_fin.'"';
                 Encabezado(2);
                 Aside($db);
                 ContentBusqueda($db,1,$consulta);
@@ -87,7 +94,7 @@ HTML;
      if(isset($_POST['conciertos_searchbutton'])){
         //Select
         if(isset($_POST['conciertos_search'])){
-            $consulta = 'SELECT * FROM concierto WHERE nombre = "'.$_POST['conciertos_search'].'"';
+            $consulta = 'SELECT * FROM concierto WHERE ciudad = "'.$_POST['conciertos_search'].'"';
             Encabezado(3);
             Aside($db);
             ContentBusqueda($db,2,$consulta);

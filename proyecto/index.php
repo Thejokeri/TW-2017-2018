@@ -2,18 +2,27 @@
     require "comun_html.php";
 
     $db = BD_conexion();
+    
+    if(isset($_GET['disco'])){
+        Encabezado(2);
+        Aside($db);
+        Content($db,2,null);
+        Footer();
+        exit;
+    }
 
     if(isset($_GET['id'])){
         Encabezado($_GET['id']);
-        Aside();
-        Content($_GET['id'],$db);
+        Aside($db);
+        Content($db,$_GET['id'],null);
         Footer(); 
     }else{
         Encabezado(0);
-        aside();
-        content(0,$db);
+        Aside($db);
+        Content($db,0,null);
         Footer();
     }
+
 
     /* require "comun.php";
 

@@ -4,8 +4,8 @@
 
     // Funciones de BBDD
     function BD_conexion(){
-        static $foo_called = false;
-        if (!$foo_called) {
+        static $called = false;
+        if (!$called) {
             $foo_called = true;
             $db = mysqli_connect(DB_HOST,DB_USER,DB_PASSWD,DB_DATABASE);
         
@@ -16,6 +16,8 @@
             }
 
             mysqli_set_charset($db,"utf8");
+            return $db;
+        }else{
             return $db;
         }
     }
@@ -125,41 +127,101 @@ HTML;
 HTML;
     }
 
-    function BD_ListarConciertos($db){
-        $consulta = "SELECT * FROM concierto;";
+    function BD_ListarConciertos($db,$consulta){
         $resultado = mysqli_query($db,$consulta);
 
         $nombre = null;
         $mostrar = false;
-        
-        while($fila = mysqli_fetch_row($resultado)){
-            if($fila['4'] != $nombre){
-                $nombre = $fila['4'];
-                echo "<span><h1>$nombre</h1></span>";
-                $mostrar = true;
+
+        if(mysqli_num_rows($resultado) > 0){
+            while($fila = mysqli_fetch_row($resultado)){
+                if($fila['4'] != $nombre){
+                    $nombre = $fila['4'];
+                    echo "<span><h1>$nombre</h1></span>";
+                    $mostrar = true;
+                }
+                echo "<span><table>";
+                if($mostrar)
+                    echo "<tr><th> Fecha </th><th> País </th><th> Ciudad </th><th> Lugar </th><tr>";
+                $newDate = date("d-m-Y", strtotime($fila['0']));
+                echo "<tr><td>", $newDate, "</td><td>", $fila['1'], "</td><td>", $fila['2'], "</td><td>", $fila['3'], "</td></tr>";
+                echo "</table></span> <span><p>";
+                echo $fila['5'];
+                echo "</p></span>";
+                $mostrar = false;
             }
-            echo "<span><table>";
-            if($mostrar)
-                echo "<tr><th> Fecha </th><th> País </th><th> Ciudad </th><th> Lugar </th><tr>";
-            $newDate = date("d-m-Y", strtotime($fila['0']));
-            echo "<tr><td>", $newDate, "</td><td>", $fila['1'], "</td><td>", $fila['2'], "</td><td>", $fila['3'], "</td></tr>";
-            echo "</table></span> <span><p>";
-            echo $fila['5'];
-            echo "</p></span>";
-            $mostrar = false;
+        }else{
+            echo "<span><p>No se ha encontrado ningun resultado</p></span>";
         }
     }
 
-    function BD_ListarAlbum($db){
-        $consulta = "SELECT * FROM album;";
+    function BD_ListarAlbum($db, $consulta){
         $resultado = mysqli_query($db,$consulta);
 
-        echo '<ul  class="image_album">';
-        while($fila = mysqli_fetch_row($resultado)){
-            echo "<li>", '<a href="index.php?disco='.$fila['nombre']."</a>", '<img src="data:image/jpeg;base64,'.base64_encode( $fila['5'] ).'"/>',"</li>";
-        }
+        if(mysqli_num_rows($resultado) > 0){
+            echo '<ul class="image_album">';
+            while($fila = mysqli_fetch_row($resultado)){
+                echo '<li><a href=index.php?disco=', $fila['0'], '>', '<img src="data:image/jpeg;base64,'.base64_encode( $fila['5'] ).'"/></a></li>';
+            }
 
-        echo "</ul>";
+            echo "</ul>";
+        }else{
+            echo "<span><p>No se ha encontrado ningun resultado</p></span>";
+        }
+    }
+
+    function BD_ListarCanciones($db,$value,$cancion){
+        $consultaralbum = 'SELECT * FROM album WHERE nombre = "'. $value.'"';
+        $consultarcancion = 'SELECT * FROM canciones WHERE nombre_album = "'.$value.'"';
+        $resultado1 = mysqli_query($db,$consultaralbum);
+        $resultado2 = mysqli_query($db,$consultarcancion);
+        $cancion = "«".$cancion."»";
+
+        while($fila = mysqli_fetch_row($resultado1)){
+            $nombre = str_replace('_', ' ', $fila['0']);
+            echo "<h1>".$nombre."</h1>";
+        echo <<<HTML
+                <span><table>
+                    <tr>
+HTML;
+                echo '<td rowspan="4">', '<img src="data:image/jpeg;base64,'.base64_encode( $fila['5'] ).'"/></td>
+                        <td>'.$fila['4'].'</td>
+                    </tr>
+                    <tr>
+                        <td>'.$fila['1'].'</td>
+                    </tr>
+                    <tr>
+                        <td>'.$fila['2'].'</td>
+                    </tr>
+                    <tr>
+                        <td>'.$fila['3'].'</td>
+                    </tr>';
+        }
+        echo <<<HTML
+                </table></span>
+
+                <span><h1>Lista de canciones</h1></span>
+
+                <span><table>
+                    <tr>
+                        <th>Posición</th>
+                        <th>Canción</th>
+                        <th>Duración</th>
+                    </tr>
+HTML;
+            while($fila = mysqli_fetch_row($resultado2)){
+                if($fila['1'] == $cancion)
+                    echo '<tr class="found"><td>'.$fila['0'].'</td><td>'.$fila['1'].'</td><td>'.$fila['3'].'</td></tr>';
+                else
+                    echo '<tr><td>'.$fila['0'].'</td><td>'.$fila['1'].'</td><td>'.$fila['3'].'</td></tr>';
+            }    
+        echo <<<HTML
+                </table></span>
+HTML;
+    }
+
+    function Buscar($db,$value){
+        print_r($value);
     }
 
     // Funciones HTML

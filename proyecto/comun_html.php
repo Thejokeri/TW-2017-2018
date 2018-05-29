@@ -2,6 +2,32 @@
 
     require "comun_db.php";
 
+     function select_fechatarjeta(){
+        echo <<<HTML
+                    <span><label>Fecha de caducidad y código de seguridad: 
+HTML;
+                    echo <<<HTML
+                                <select name="mestarjeta">
+                                    <option value="" selected>--</option>
+HTML;
+                                for($i = 1; $i <= 12; $i++)
+                                    echo '<option value="',$i,'">',$i,'</option>';
+
+                    echo <<<HTML
+                                    </select> / 
+HTML;
+                    echo <<<HTML
+                                <select name="aniotarjeta">
+                                    <option value="" selected>----</option>
+HTML;
+                                for($i = 2018; $i <= 2029; $i++)
+                                    echo '<option value="',$i,'">',$i,'</option>';
+
+                    echo <<<HTML
+                                </select></label></span>
+HTML;
+    }
+
     // Encabezado de los HTMLs
     function Encabezado($value){
         $items = ["Home", "Biografía", "Discografía", "Conciertos", "Register", "Login"];
@@ -43,21 +69,29 @@ HTML;
     }
 
     // Aside 
-    function Aside(){
+    function Aside($db){
+        $consulta = "SELECT DISTINCT nombre FROM concierto;";
+        $resultado = mysqli_query($db,$consulta);
+
         echo <<<HTML
             <aside class="aside-grid">
                 <span><form action="busqueda.php" method="POST">
-                    <span><label>Buscar un disco o una canción <input type="text" name="discografia_search"/></label></span>
+                    <span><label>Buscar un disco o una canción <input type="text" name="search" placeholder="Buscar..."/></label></span>
+                    <span><label> Introducir dos fechas: <input type="text" name="fecha_iniciocancion" placeholder="Fecha de inicio"/> <input type="text" name="fecha_fincancion" placeholder="Fecha de final"/></label></span> 
                     <span><input type="submit" name="discografia_searchbutton" value="Buscar"/></span>
                 </form></span>
                 
                 <span><form action="busqueda.php" method="POST">
                     <span><label> Selecciona una concierto:
                     <select name="conciertos_search" multiple>
-                        <option> Alive 1997 </option>
-                        <option> Alive 2006/2007 </option>
+HTML;
+                    while($fila = mysqli_fetch_row($resultado)){
+                            echo "<option>", $fila['0'], "</option>";
+                    }
+        echo <<<HTML
                     </select></label></span>
-                    <span><input type="submit" name="conciertos_searchbutton" value="Mostrar Gira"/></span>
+                    <span><label> Introducir dos fechas: <input type="text" name="fecha_iniciogira" placeholder="Fecha de inicio"/> <input type="text" name="fecha_fingira" placeholder="Fecha de final"/></label></span> 
+                    <span><input type="submit" name="conciertos_searchbutton" value="Buscar"/></span>
                 </form></span>
             </aside>
 HTML;
@@ -67,34 +101,8 @@ HTML;
         */
     }
 
-    function select_fechatarjeta(){
-        echo <<<HTML
-                    <label>Fecha de caducidad y código de seguridad: 
-HTML;
-                    echo <<<HTML
-                                <span><select name="mestarjeta">
-                                    <option value="" selected>--</option>
-HTML;
-                                for($i = 1; $i <= 12; $i++)
-                                    echo '<option value="',$i,'">',$i,'</option>';
-
-                    echo <<<HTML
-                                    </select> / 
-HTML;
-                    echo <<<HTML
-                                <select name="aniotarjeta">
-                                    <option value="" selected>----</option>
-HTML;
-                                for($i = 2018; $i <= 2029; $i++)
-                                    echo '<option value="',$i,'">',$i,'</option>';
-
-                    echo <<<HTML
-                                </select></span></label>
-HTML;
-    }
-
     // El contenido del main de cada página
-    function Content($value,$db){
+    function Content($db,$value){
         switch($value){
             // Home
             case 0:
@@ -104,9 +112,9 @@ HTML;
                             <h1> Home </h1>
                             <span><p> 
                                 Daft Punk es un dúo de productores formado por los músicos franceses Guy-Manuel 
-                                de Homem-Christo (n. 1974) y Thomas Bangalter (n. 1975).4​5​6​ Daft Punk alcanzó 
+                                de Homem-Christo (n. 1974) y Thomas Bangalter (n. 1975). Daft Punk alcanzó 
                                 una gran popularidad en el estilo house a finales de la década de los 90 en Francia 
-                                y continuó con su éxito los años siguientes, usando el estilo synthpop.4​5​7​ El dúo 
+                                y continuó con su éxito los años siguientes, usando el estilo synthpop. El dúo 
                                 también es acreditado por la producción de canciones que se consideran esenciales en 
                                 el estilo french house. 
                             </p></span>
@@ -165,7 +173,8 @@ HTML;
                 echo <<<HTML
                     <main class="main-grid">
                         <article>
-            
+                            <h1>Biografía</h1>
+
                         </article>
                     </main> 
 HTML;
@@ -178,12 +187,31 @@ HTML;
 HTML;
                         if(isset($_GET['disco'])){
                             echo "<article>";
-                            BD_ListarCanciones();
+                                BD_ListarCanciones($db,$_GET['disco'],null);
                             echo "</article>";
+                echo <<<HTML
+                            <article>
+                                <form action="busqueda.php" method="POST">
+                                    <span><label>Nombre: <input type="text" name="nombre"/></label></span>
+                                    <span><label>Apellidos: <input type="text" name="apellidos"/></label></span>
+                                    <span><label>Correo electrónico: <input type="email" name="email"/></label></span>
+                                    <span><label>Telefono: <input type="number" name="telefono"/></label></span>
+                                    <span><label>Dirección de envio: <input type="text" name="direccion"/></label></span>
+                                    <span><label><input type="radio" name="metodopago" value="tarjetadecredito"/> Tarjeta de crédito </label></span>
+                                    <span><label><input type="radio" name="metodopago" value="contrareembolso"/> Contra-reembolso </label></span>
+                                    <span><label>Número de tarjeta: <input type="number" name="numtarjeta"/></label></span>
+HTML;
+                                    select_fechatarjeta();
+                echo <<<HTML
+                                    <span><label>cvc: <input type="number" name="cvc"/></label></span>
+                                    <span><input type="submit" name="comprar" value="Comprar"/></span>
+                                </form>
+                            </article>
+HTML;
                         }else{
+                            $consulta = "SELECT * FROM album;";
                             echo "<article>";
-                            // Listamos los albumes de la Base de datos
-                            BD_ListarAlbum($db);
+                                BD_ListarAlbum($db, $consulta);
                             echo "</article>";
                         }
             echo <<<HTML
@@ -197,8 +225,9 @@ HTML;
                     <main class="main-grid">
                         <article>
 HTML;
+                            $consulta = "SELECT * FROM concierto;";
                             // Listamos los conciertos de la Base de datos
-                            BD_ListarConciertos($db);
+                            BD_ListarConciertos($db,$consulta);
             echo <<<HTML
                         </article>
                     </main> 
@@ -212,7 +241,7 @@ HTML;
                         <article>
                             <h1>Register</h1>
 
-                            <form action="index.php" method="POST">
+                            <form action="registrar.php" method="POST">
                                 <span><label>Id de usuario: <input type="text" name="id"/></label></span>
                                 <span><label>Contraseña: <input type="password" name="password"/></label></span>
                                 <span><label>Nombre: <input type="text" name="nombre"/></label></span>
@@ -239,7 +268,7 @@ HTML;
                         <article>
                             <h1>Login</h1>
 
-                            <form action="index.php" method="POST">
+                            <form action="log.php" method="POST">
                                 <span><label>Id de usuario: <input type="text" name="id"/></label></span>
                                 <span><label>Contraseña: <input type="password" name="password"/></label></span>
 

@@ -14,89 +14,6 @@ video,footer {
     margin: 0;
     padding: 0;
     border: 0;
-    vertical-align: baseline;
-}
-
-body, button, a, a:hover, 
-label, ul li a, div, img, *{
-  cursor: url(./img/cursor.png),auto;
-}
-
-@font-face {
-    font-family: "myfont";
-    src: url("./Tipo\ de\ letra/normal.woff2") format('woff');
-}
-
-@font-face {
-    font-family: "myfontbold";
-    src: url("./Tipo\ de\ letra/negrita.woff2") format('woff');
-    font-weight: bold;
-}
-
-h1 {
-    font-family: myfontbold;
-    padding: 5%;
-    padding-top: 0;
-}
-
-p, li, a, label, th, td {
-    font-family: myfont;
-    
-}
-
-label {
-    font-size: 12px;
-}
-
-span {
-    display: block;
-    padding: 5%;
-}
-
-table {
-    border-collapse: collapse;
-    width: 100%;
-}
-
-th, td {
-    padding: 8px;
-    text-align: left;
-    border-bottom: 1px solid #F3F4EE;
-}
-
-tr:hover {
-    background-color:#4b4949;
-}
-
-
-input[type=text], input[type=password], input[type=email], select{
-    width: 100%;
-    padding: 10px;
-    margin: 8px 0;
-    display: inline-block;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-}
-
-input[type=submit] {
-    width: 100%;
-    background-color: rgb(44, 212, 156);
-    color: #F3F4EE;
-    padding: 14px 20px;
-    margin: 8px 0;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-aside > * {
-    width: 100%;
-    padding: 10px;
-}
-
-input[type=submit]:hover {
-    background-color: #96c998;
 }
 
 .grid {
@@ -142,6 +59,103 @@ input[type=submit]:hover {
         ". main aside ."
         ". footer footer .";
     }
+}
+
+@media screen and (max-device-width: 480px){
+    .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 5% 10% 100% 5%;
+        grid-template-areas: 
+        "header header"  
+        "nav nav"
+        "aside aside"
+        "main main" 
+        "footer footer";
+    }
+}
+
+body, button, a, a:hover, 
+label, ul li a, div, img, *{
+  cursor: url(./img/cursor.png),auto;
+}
+
+@font-face {
+    font-family: "myfont";
+    src: url("./Tipo\ de\ letra/normal.woff2") format('woff');
+}
+
+@font-face {
+    font-family: "myfontbold";
+    src: url("./Tipo\ de\ letra/negrita.woff2") format('woff');
+    font-weight: bold;
+}
+
+h1 {
+    font-family: myfontbold;
+    padding: 5%;
+    padding-top: 0;
+}
+
+p, li, a, label, th, td {
+    font-family: myfont;
+}
+
+label {
+    font-size: 12px;
+}
+
+span {
+    display: block;
+    padding: 5%;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #F3F4EE;
+}
+
+td img {
+    width: 100%;
+}
+
+tr.found {
+    background-color:#333232;
+}
+
+tr:hover {
+    background-color:#4b4949;
+}
+
+input[type=text], input[type=password], input[type=email], input[type=number],select{
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+input[type=submit] {
+    width: 100%;
+    background-color: rgb(44, 212, 156);
+    color: #F3F4EE;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+input[type=submit]:hover {
+    background-color: #96c998;
 }
 
 body {
@@ -197,6 +211,11 @@ header img{
     width: 350px;
 }
 
+aside > * {
+    width: 100%;
+    padding: 10px;
+}
+
 main {
     display: inline;
     align-content: center;
@@ -226,6 +245,15 @@ ul.image_album li {
     list-style: none;
     width: 10%;
     padding: 10%;
+}
+
+@media screen and (min-width: 736px) {
+    ul.image_album li {
+        float: left;
+        list-style: none;
+        width: 70px;
+        padding: 10%;
+    }
 }
 
 ul.image_album li img {

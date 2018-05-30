@@ -106,6 +106,9 @@ HTML;
         switch($value){
             // Home
             case 0:
+                $consulta = "SELECT * FROM componentes;";
+                $resultado = mysqli_query($db,$consulta);
+
                 echo <<<HTML
                     <main class="main-grid">
                         <article>
@@ -161,7 +164,17 @@ HTML;
 
                         <article>
                             <h1> Componentes </h1>
-
+HTML;
+                            while($fila = mysqli_fetch_row($resultado)){
+                                $fecha = date("Y-m-d", strtotime($fila['1']));
+                                echo '<span><section class="componentefoto">';
+                                echo '<img src="data:image/jpeg;base64,'.base64_encode( $fila['3'] ).'"/></section></span>';
+                                echo '<span><h1>'.$fila['0']."</h1></span>";
+                                echo "<span><p>".$fecha."  ".$fila['2']."</p></span>";
+                                echo "<span><p>".$fila['4']."</p></span>";
+                                echo "</section></span>";
+                            }
+            echo <<<HTML
                             
                         </article>
                     </main>
@@ -170,11 +183,22 @@ HTML;
 
             // Biografía
             case 1:
+                $consulta = "SELECT * FROM biografia;";
+                $resultado = mysqli_query($db,$consulta);
+
                 echo <<<HTML
                     <main class="main-grid">
                         <article>
                             <h1>Biografía</h1>
-
+HTML;
+                            while($fila = mysqli_fetch_row($resultado)){
+                                echo "<span><section><h1>".$fila['1']."</h1>";
+                                echo "<span>".$fila['3']."</span>";
+                                if(!is_null($fila['2']))
+                                    echo '<span><img id="main" src="data:image/jpeg;base64,'.base64_encode( $fila['2'] ).'"/></span>';
+                                echo "</section></span>";
+                            }
+            echo <<<HTML
                         </article>
                     </main> 
 HTML;

@@ -216,6 +216,11 @@ aside > * {
     padding: 10px;
 }
 
+aside {
+    display: inline-block;
+    padding: 15%;
+}
+
 main {
     display: inline;
     align-content: center;
@@ -236,6 +241,15 @@ img#main {
     margin-right: auto;
 }
 
+section.componentefoto {
+    float: left;
+    padding: 5%;
+}
+
+.componentefoto img{
+    width: 65%;
+}
+
 ul.image_album{
     display: inline-block;
 }
@@ -247,22 +261,8 @@ ul.image_album li {
     padding: 10%;
 }
 
-@media screen and (min-width: 736px) {
-    ul.image_album li {
-        float: left;
-        list-style: none;
-        width: 70px;
-        padding: 10%;
-    }
-}
-
 ul.image_album li img {
     width: 250%;
-}
-
-aside {
-    display: inline-block;
-    padding: 15%;
 }
 
 footer {

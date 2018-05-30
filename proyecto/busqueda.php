@@ -1,5 +1,5 @@
 <?php
-    require "comun_html.php";
+    require "./funciones/comun_html.php";
  
     $db = BD_conexion();
 

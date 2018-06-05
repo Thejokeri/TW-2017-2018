@@ -29,17 +29,19 @@ HTML;
     }
 
     // Encabezado de los HTMLs
-    function Encabezado($value){
-        $items = ["Home", "Biografía", "Discografía", "Conciertos", "Register", "Login"];
-        $links = ["index.php?id=0", "index.php?id=1", "index.php?id=2", "index.php?id=3", "index.php?id=4", "index.php?id=5"];
-        echo <<<HTML
+    function Encabezado($value, $logged){
+        if(!$logged){
+            $items1 = ["Home", "Biografía", "Discografía", "Conciertos", "Register", "Login"];
+            $links1 = ["index.php?id=0", "index.php?id=1", "index.php?id=2", "index.php?id=3", "index.php?id=4", "index.php?id=5"];
+            
+            echo <<<HTML
                         <!DOCTYPE html>
                         <!-- Ejemplo de página web -->
                         <html lang="es">   
                             <head>
 HTML;
                                 //Selecciono el titulo
-                                echo "<title>Daft Punk | ".$items[$value]."</title>";
+                                echo "<title>Daft Punk | ".$items1[$value]."</title>";
 echo <<< HTML
                                 <meta charset="utf-8">
                                 <meta name="author" content="Fernando Talavera Mendoza">
@@ -56,20 +58,60 @@ echo <<< HTML
                                     <ul>
 HTML;
                         // Genero el nav y activo el <a>
-                        foreach ($items as $k => $v){
+                        foreach ($items1 as $k => $v){
                             if($k == 4 || $k == 5)
-                                echo '<li id="right"'.($k==$value?" class='active'":"").">"."<a href='".$links[$k]."'>".$v."</a></li>";
+                                echo '<li id="right"'.($k==$value?" class='active'":"").">"."<a href='".$links1[$k]."'>".$v."</a></li>";
                             else
-                                echo "<li".($k==$value?" class='active'":"").">"."<a href='".$links[$k]."'>".$v."</a></li>";
+                                echo "<li".($k==$value?" class='active'":"").">"."<a href='".$links1[$k]."'>".$v."</a></li>";
                         }
         echo <<<HTML
                                     </ul>
                                 </nav>
 HTML;
+        }else{
+            $item2 = ["Home", "Biografía", "Discografía", "Conciertos", $_SESSION['id']];
+            $links2 = ["index.php?id=0", "index.php?id=1", "index.php?id=2", "index.php?id=3", 'index.php?user="'.$_SESSION['id'].'"'];
+            
+            echo <<<HTML
+                        <!DOCTYPE html>
+                        <!-- Ejemplo de página web -->
+                        <html lang="es">   
+                            <head>
+HTML;
+                                //Selecciono el titulo
+                                echo "<title>Daft Punk | ".$items2[$value]."</title>";
+echo <<< HTML
+                                <meta charset="utf-8">
+                                <meta name="author" content="Fernando Talavera Mendoza">
+                                <meta name="keywords" content="tecnologías web, html, programación">
+                                <link rel="shortcut icon" href="./img/favicon.png" type="image/png">
+                                <link rel="stylesheet" href="./style.css">
+                            </head>
+                            
+                            <body class="grid">
+                                <header class="header-grid">
+                                    <img src="./img/logo-image-file.png" alt="Logo Imagen"/>
+                                </header>
+                                <nav class="nav-grid">
+                                    <ul>
+HTML;
+                        // Genero el nav y activo el <a>
+                        foreach ($items2 as $k => $v){
+                            if($k == 4 || $k == 5)
+                                echo '<li id="right"'.($k==$value?" class='active'":"").">"."<a href='".$links2[$k]."'>".$v."</a></li>";
+                            else
+                                echo "<li".($k==$value?" class='active'":"").">"."<a href='".$links2[$k]."'>".$v."</a></li>";
+                        }
+        echo <<<HTML
+                                    </ul>
+                                </nav>
+HTML;
+        }
+        
     }
 
     // Aside 
-    function Aside($db){
+    function Aside($db, $admin){
         $consulta = "SELECT DISTINCT ciudad FROM concierto;";
         $resultado = mysqli_query($db,$consulta);
 
@@ -258,27 +300,25 @@ HTML;
 HTML;
             break;
 
-            // 
+            // Registro de usuario
             case 4:
                 echo <<<HTML
                     <main class="main-grid">
                         <article>
                             <h1>Register</h1>
 
-                            <form action="registrar.php" method="POST">
+                            <form action="register.php" method="POST">
                                 <span><label>Id de usuario: <input type="text" name="id"/></label></span>
                                 <span><label>Contraseña: <input type="password" name="password"/></label></span>
                                 <span><label>Nombre: <input type="text" name="nombre"/></label></span>
                                 <span><label>Apellidos: <input type="text" name="apellido"/></label></span> 
                                 <span><label>Email: <input type="email" name="email"/></label></span> 
+                                <span><label>Teléfono: <input type="number" name="tlf"/></label></span>
                                 <span><label>Tipo de usuario: 
                                 <select name="tipo">
                                     <option value="1" selected>Administrador</option>
                                     <option value="2">Gestor de compras</option>
                                 </select></label></span>
-
-                                <!--<input type="hidden" name="accionBD">-->
-
                                 <span><input type="submit" name="signup" value="Sign up"/></span>
                             </form>
                         </article>
@@ -286,18 +326,16 @@ HTML;
 HTML;
             break;
 
+            // Login
             case 5:
                 echo <<<HTML
                     <main class="main-grid">
                         <article>
                             <h1>Login</h1>
 
-                            <form action="log.php" method="POST">
+                            <form action="login.php" method="POST">
                                 <span><label>Id de usuario: <input type="text" name="id"/></label></span>
                                 <span><label>Contraseña: <input type="password" name="password"/></label></span>
-
-                                <!--<input type="hidden" name="accionBD">-->
-
                                 <span><input type="submit" name="login" value="Login"/></span>
                             </form>
 

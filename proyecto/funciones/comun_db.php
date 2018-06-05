@@ -2,6 +2,18 @@
 
     require_once("credenciales.php");
 
+    function ComprobarDatosVacios($post){
+        $comprobar = false;
+        
+        foreach ($post as $k => $v){
+            if($v == "")
+                $comprobar = true;
+        }
+
+        return $comprobar;
+    }
+
+
     // Funciones de BBDD
     function BD_conexion(){
         static $called = false;
@@ -23,26 +35,24 @@
     }
     
     function BD_CrearUsuario($db, $post){
-        $consulta = sprintf("SELECT nombre FROM usuarios WHERE nombre = '%s';", mysqli_real_escape_string($db, $post["nombre"]));
+        $consulta = sprintf("SELECT id FROM usuarios_proyecto WHERE id = '%s';", mysqli_real_escape_string($db, $post["id"]));
         $resultado = mysqli_fetch_assoc(mysqli_query($db,$consulta));
         
-        if($resultado['nombre'] == $post['nombre'] && !empty($post['nombre'])){
-            CrearUsuario(true,$post);
+
+        if($resultado || ComprobarDatosVacios($post)){
+            return false;
         }else{
-            if(!empty($post['nombre']) && !empty($post['apellido']) && !empty($post['email']) && !empty($post['passwd']) && !empty($post['tipo'])){
-
-                $consulta = sprintf("INSERT INTO usuarios(nombre,apellido,email,passwd,tipo) VALUES ('%s','%s','%s','%s',%d);", 
-                            mysqli_real_escape_string($db, $post["nombre"]), 
-                            mysqli_real_escape_string($db, $post["apellido"]),  
-                            mysqli_real_escape_string($db, $post["email"]),  
-                            password_hash($post["passwd"], PASSWORD_DEFAULT),  
+            $consulta = sprintf("INSERT INTO usuarios_proyecto (id, password, nombre, apellido, email, tlf, tipo) VALUES ('%s','%s','%s','%s','%s',%d,%d);", 
+                            mysqli_real_escape_string($db, $post["id"]), 
+                            password_hash($post["password"], PASSWORD_DEFAULT),  
+                            mysqli_real_escape_string($db, $post["nombre"]),  
+                            mysqli_real_escape_string($db, $post["apellido"]),
+                            mysqli_real_escape_string($db, $post["email"]),
+                            mysqli_real_escape_string($db, $post["tlf"]),
                             mysqli_real_escape_string($db, $post["tipo"]));
-
-                $resultado = mysqli_query($db, $consulta);
-                mensaje_correcto(1);
-            }else{
-                CrearUsuario(false,$post);
-            }
+        
+            $resultado = mysqli_query($db, $consulta);
+            return true;
         }
     }
 
@@ -212,382 +222,6 @@ HTML;
             }    
         echo <<<HTML
                 </table></span>
-HTML;
-    }
-
-    function Buscar($db,$value){
-        print_r($value);
-    }
-
-    // Funciones HTML
-
-    function Index(){
-        echo <<<HTML
-                <!DOCTYPE html>
-                <!-- Ejemplo de página web -->
-                    <html lang="es">
-
-                    <head>
-                        <title>Tecnologías Web</title>
-                        <meta charset="utf-8">
-                        <meta name="author" content="Fernando Talavera Mendoza">
-                        <meta name="keywords" content="tecnologías web, html, programación">
-                        <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
-                    </head>
-
-                    <body>
-                        <form action="index.php" method="POST">
-                            <fieldset>
-                                <legend>Introduzca sus credenciales</legend>
-                                        Usuario: <br> <br>
-                                        <input type="text" name="usuario" value="root"/>
-                                        <br> <br>
-                                        Contraseña: <br> <br>
-                                        <input type="password" name="passwd" value="root"/> 
-                                        <br> <br>
-                            </fieldset>
-                            <br>
-                            <input type="submit" name="envio" value="Enviar"/>
-                        </form>
-                        <p> * admin: root, contraseña: root </p>
-                        <p> * user: user, contraseña: user </p>
-                    </body>
-                    </html>
-HTML;
-    }
-
-    function Logged($db){
-       
-        if(isset($_SESSION['nombre']) && isset($_SESSION['passwd'])){
-            $verificado = true;
-        }else{
-            $consulta = sprintf("SELECT passwd FROM usuarios WHERE nombre = '%s';", mysqli_real_escape_string($db, $_POST['usuario']));
-            $resultado = mysqli_fetch_assoc(mysqli_query($db, $consulta));
-            if($resultado && password_verify($_POST['passwd'], $resultado['passwd'])){
-                $_SESSION['nombre'] = $_POST['usuario'];
-                $_SESSION['passwd'] = $_POST['passwd'];
-                $verificado = true;
-            }else{
-                $verificado = false;
-            }
-        }
-            
-        if($verificado){
-            $consulta = sprintf("SELECT tipo FROM usuarios WHERE nombre = '%s';", mysqli_real_escape_string($db, $_SESSION['nombre']));
-            $resultado = mysqli_fetch_assoc(mysqli_query($db,$consulta));
-            if($resultado['tipo'] == 2){
-echo <<<HTML
-                    <!DOCTYPE html>
-                    <!-- Ejemplo de página web -->
-                        <html lang="es">
-
-                        <head>
-                            <title>Tecnologías Web</title>
-                            <meta charset="utf-8">
-                            <meta name="author" content="Fernando Talavera Mendoza">
-                            <meta name="keywords" content="tecnologías web, html, programación">
-                            <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
-                        </head>
-
-                        <body>
-HTML;
-                            echo "<p> Bienvenido administrador: ", $_SESSION["nombre"], "</p>";
-                            echo "<br>";
-                echo <<<HTML
-                            <form action="index.php" method="POST">
-                                <input type="hidden" name="entrarBD"> 
-                                <input type="submit" name="crear" value="Crear Usuario"/> <br> <br>
-                                <input type="submit" name="modificar" value="Modificar Usuarios"/> <br> <br>
-                                <input type="submit" name="borrar" value="Borrar Usuario"/> <br> <br>
-                                <input type="submit" name="logout" value="Logout"/> <br> <br>
-HTML;
-                                BD_ListarUsuarios($db);
-                echo <<<HTML
-                            </form>
-                        </body>
-                        </html>
-HTML;
-        }else{
-            echo <<<HTML
-                    <!DOCTYPE html>
-                    <!-- Ejemplo de página web -->
-                        <html lang="es">
-
-                        <head>
-                            <title>Tecnologías Web</title>
-                            <meta charset="utf-8">
-                            <meta name="author" content="Fernando Talavera Mendoza">
-                            <meta name="keywords" content="tecnologías web, html, programación">
-                            <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
-                        </head>
-
-                        <body>
-HTML;
-                            echo "<p> Bienvenido usuario: ", $_SESSION["nombre"], "</p>";
-                echo <<<HTML
-                            <p> Los usuario normales no tienes permiso para realizar operaciones sobre la base de datos. </p>
-                            <form action="index.php" method="POST">
-                                <input type="submit" name="logout" value="Logout"/>
-                            </form>
-                        </body>
-                        </html>
-HTML;
-            }
-        }else{
-            echo <<<HTML
-                <!DOCTYPE html>
-                <!-- Ejemplo de página web -->
-                    <html lang="es">
-
-                    <head>
-                        <title>Tecnologías Web</title>
-                        <meta charset="utf-8">
-                        <meta name="author" content="Fernando Talavera Mendoza">
-                        <meta name="keywords" content="tecnologías web, html, programación">
-                        <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
-                    </head>
-
-                    <body>
-                        <form action="index.php" method="POST">
-                            <p style="color:red;">Usuario o contraseña incorrectas</p>
-                            <br>
-                            <fieldset>
-                                <legend>Introduzca sus credenciales</legend>
-                                        Usuario: <br> <br>
-                                        <input type="text" name="usuario"/>
-                                        <br> <br>
-                                        Password: <br> <br>
-                                        <input type="password" name="passwd"/> 
-                                        <br> <br>
-                            </fieldset>
-                            <br>
-                            <input type="submit" name="envio" value="Enviar"/>
-                        </form>
-                    </body>
-                    </html>
-HTML;
-        }
-    }
-
-    function CrearUsuario($fallo,$post){
-        echo <<<HTML
-            <!DOCTYPE html>
-            <!-- Ejemplo de página web -->
-                <html lang="es">
-
-                <head>
-                    <title>Tecnologías Web</title>
-                    <meta charset="utf-8">
-                    <meta name="author" content="Fernando Talavera Mendoza">
-                    <meta name="keywords" content="tecnologías web, html, programación">
-                    <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
-                </head>
-
-                <body>
-HTML;
-                    if($fallo)
-                        echo '<p style="color:red;">Usuario ya existente</p>';
-            echo<<<HTML
-                    <form action="index.php" method="POST">
-                        <p>Rellene los campos para crear un usuario</p>
-                        Nombre: <br> <br>
-HTML;
-                        if(empty($post['nombre']) && !is_null($post)){
-                            echo '<input type="text" name="nombre"/>';
-                            echo '<p style="color:red;">Campo vacio</p>';
-                        }else{
-                            if(is_null($post)){
-                                echo '<input type="text" name="nombre"/>';
-                                echo '<br> <br>';
-                            }else{
-                                echo '<input type="text" name="nombre" value="', $post['nombre'], '"/>';
-                                echo "<br> <br>";
-                            }
-                        }
-            echo<<<HTML
-                        Apellidos: <br> <br>
-HTML;
-                        if(empty($post['apellido']) && !is_null($post)){
-                            echo '<input type="text" name="apellido"/>';
-                            echo '<p style="color:red;">Campo vacio</p>';
-                        }else{
-                            if(is_null($post)){
-                                echo '<input type="text" name="apellido"/>';
-                                echo '<br> <br>';
-                            }else{
-                                echo '<input type="text" name="apellido" value="', $post['apellido'], '"/>';
-                                echo "<br> <br>";
-                            }
-                        }
-            echo<<<HTML
-                        Email: <br> <br>
-HTML;
-                        if(empty($post['email']) && !is_null($post)){
-                            echo '<input type="email" name="email"/>';
-                            echo '<p style="color:red;">Campo vacio</p>';
-                        }else{
-                            if(is_null($post)){
-                                echo '<input type="email" name="email"/>';
-                                echo '<br> <br>';
-                            }else{
-                                echo '<input type="email" name="email" value="', $post['email'], '"/>';
-                                echo "<br> <br>";
-                            }
-                        }
-            echo<<<HTML
-                        Contraseña: <br> <br>
-HTML;
-                        if(empty($post['passwd']) && !is_null($post)){
-                            echo '<input type="password" name="passwd"/>';
-                            echo '<p style="color:red;">Campo vacio</p>';
-                        }else{
-                            echo '<input type="password" name="passwd"/>';
-                            echo "<br> <br>";
-                        }
-            echo<<<HTML
-                        Tipo de usuario: <br> <br>
-                        <select name="tipo">
-                            <option value="1" selected>usuario</option>
-                            <option value="2">administrador</option>
-                        </select>
-                        <br> <br>
-                        <input type="hidden" name="accionBD">
-                        <br> <br>
-                        <input type="submit" name="crearusuario" value="Crear Usuario"/> <input type="submit" name="envio" value="Volver"/>
-                    </form>
-                </body>
-                </html>
-HTML;
-    }
-
-    function ModificarUsuario($db,$fallo){
-        echo <<<HTML
-            <!DOCTYPE html>
-            <!-- Ejemplo de página web -->
-                <html lang="es">
-
-                <head>
-                    <title>Tecnologías Web</title>
-                    <meta charset="utf-8">
-                    <meta name="author" content="Fernando Talavera Mendoza">
-                    <meta name="keywords" content="tecnologías web, html, programación">
-                    <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
-                </head>
-
-                <body>
-HTML;
-                    if($fallo)
-                        echo '<p style="color:red;">Usuario ya existente</p>';
-            echo<<<HTML
-                    <form action="index.php" method="POST">
-                        <p>Seleccione el usuario a modificar</p>
-HTML;
-                        $consulta = "SELECT * FROM usuarios;";
-                        $resultado = mysqli_query($db,$consulta);
-                        $p = true;
-                        while($fila = mysqli_fetch_row($resultado)){
-                            if($p){
-                                echo '<label><input type="radio" name="seleccionado" value="', $fila['0'], '" checked/> ', $fila['0'] ," </label> <br> <br>";
-                                $p = false;
-                            }else
-                                echo '<label><input type="radio" name="seleccionado" value="', $fila['0'], '"/> ', $fila['0'] ," </label> <br> <br>";
-                        }
-            echo<<<HTML
-                        <p> Introduzca los nuevos campos, dejar en blanco para no modificar: </p>
-                        Nombre: <br> <br>
-                        <input type="text" name="nombre"/>
-                        <br> <br>
-                        Apellidos: <br> <br>
-                        <input type="text" name="apellido"/> 
-                        <br> <br>
-                        Email: <br> <br>
-                        <input type="email" name="email"/> 
-                        <br> <br>
-                        Contraseña: <br> <br>
-                        <input type="password" name="passwd"/> 
-                        <br> <br>
-                        Tipo de usuario: <br> <br>
-                        <select name="tipo">
-                            <option value="1" selected>usuario</option>
-                            <option value="2">administrador</option>
-                        </select>
-                        <input type="hidden" name="accionBD">
-                        <br> <br>
-                        <input type="submit" name="modificarusuario" value="Modificar Usuario"/> <input type="submit" name="envio" value="Volver"/>
-                    </form>
-                </body>
-                </html>
-HTML;
-    }
-
-    function BorrarUsuario($db,$fallo){
-        echo <<<HTML
-            <!DOCTYPE html>
-            <!-- Ejemplo de página web -->
-                <html lang="es">
-
-                <head>
-                    <title>Tecnologías Web</title>
-                    <meta charset="utf-8">
-                    <meta name="author" content="Fernando Talavera Mendoza">
-                    <meta name="keywords" content="tecnologías web, html, programación">
-                    <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
-                </head>
-
-                <body>
-                    <form action="index.php" method="POST">
-                        <p>Seleccione el usuario a borrar:</p>
-HTML;
-                        $consulta = "SELECT * FROM usuarios;";
-                        $resultado = mysqli_query($db,$consulta);
-                        $p = true;
-                        while($fila = mysqli_fetch_row($resultado)){
-                            if($p){
-                                echo '<label><input type="radio" name="nombre" value="', $fila['0'], '" checked/> ', $fila['0'] ," </label> <br> <br>";
-                                $p = false;
-                            }else
-                                echo '<label><input type="radio" name="nombre" value="', $fila['0'], '"/> ', $fila['0'] ," </label> <br> <br>";
-                        }
-            echo<<<HTML
-                        <input type="hidden" name="accionBD">
-                        <br><br>
-                        <input type="submit" name="borrarusuario" value="Borrar Usuario"/> <input type="submit" name="envio" value="Volver"/>
-                    </form>
-                </body>
-                </html>
-HTML;
-    }
-
-    function mensaje_correcto($value){
-        echo <<<HTML
-                <!DOCTYPE html>
-                <!-- Ejemplo de página web -->
-                    <html lang="es">
-
-                    <head>
-                        <title>Tecnologías Web</title>
-                        <meta charset="utf-8">
-                        <meta name="author" content="Fernando Talavera Mendoza">
-                        <meta name="keywords" content="tecnologías web, html, programación">
-                        <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
-                    </head>
-
-                    <body>
-                        <form action="index.php" method="POST">
-HTML;
-                            if($value == 1)
-                                echo "<p> Usuario creado con éxito </p>";
-                            
-                            if($value == 2)
-                                echo "<p> Usuario modificado con éxito </p>";
-
-                            if($value == 3)
-                                echo "<p> Usuario borrado con éxito </p>";
-            echo <<<HTML
-                            <input type="submit" name="envio" value="Volver"/> <input type="submit" name="logout" value="Logout"/> 
-                        </form>
-                    </body>
-                    </html>
 HTML;
     }
 

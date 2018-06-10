@@ -3,30 +3,27 @@
 
     $db = BD_conexion();
     
-    if(isset($_GET['logged'])){
-        Encabezado(0,true);
-        Aside($db,true);
-        Content();
+    if(isset($_GET['disco'])){
+        Encabezado(2);
+        Aside($db);
+        Content($db,2);
         Footer();
-    }else{
-        if(isset($_GET['disco'])){
-            Encabezado(2,false);
-            Aside($db,false);
-            Content($db,2,null);
-            Footer();
-            exit;
-        }
+        exit;
+    }
 
-        if(isset($_GET['id'])){
-            Encabezado($_GET['id'],false);
-            Aside($db,false);
-            Content($db,$_GET['id'],null);
-            Footer(); 
+    if(isset($_GET['id'])){
+        if($_GET['id'] == "logout"){
+            Logout();
         }else{
-            Encabezado(0,false);
-            Aside($db,false);
-            Content($db,0,null);
+            Encabezado($_GET['id']);
+            Aside($db);
+            Content($db,$_GET['id']);
             Footer();
-        }
+        } 
+    }else{
+        Encabezado(0);
+        Aside($db);
+        Content($db,0);
+        Footer();
     }
 ?>

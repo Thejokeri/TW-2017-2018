@@ -73,43 +73,49 @@ HTML;
         }
     }
 
-    if(isset($_POST['discografia_searchbutton'])){
-        if(isset($_POST['search']) && !empty($_POST['search'])){ 
-            Encabezado(2);
-            Aside($db);
-            ContentBusqueda($db,0,null);
-            Footer();
-        }else{
-            if(isset($_POST['fecha_iniciocancion']) && isset($_POST['fecha_fincancion'])){
-                $fecha_inicio = date("Y-m-d", strtotime($_POST['fecha_iniciocancion']));
-                $fecha_fin = date("Y-m-d", strtotime($_POST['fecha_fincancion']));
-                $consulta = 'SELECT nombre FROM album WHERE fecha >= "'.$fecha_inicio.'" and fecha <= "'.$fecha_fin.'"';
+    if(!isset($_POST['discografia_searchbutton']) && !isset($_POST['conciertos_searchbutton'])){
+        $url = 'https://void.ugr.es/~ftm19971718/proyecto/index.php';
+        header('Location: '.$url);
+    }else{
+        if(isset($_POST['discografia_searchbutton'])){
+            if(isset($_POST['search']) && !empty($_POST['search'])){ 
                 Encabezado(2);
                 Aside($db);
-                ContentBusqueda($db,1,$consulta);
+                ContentBusqueda($db,0,null);
                 Footer();
+            }else{
+                if(isset($_POST['fecha_iniciocancion']) && isset($_POST['fecha_fincancion'])){
+                    $fecha_inicio = date("Y-m-d", strtotime($_POST['fecha_iniciocancion']));
+                    $fecha_fin = date("Y-m-d", strtotime($_POST['fecha_fincancion']));
+                    $consulta = 'SELECT nombre FROM album WHERE fecha >= "'.$fecha_inicio.'" and fecha <= "'.$fecha_fin.'"';
+                    Encabezado(2);
+                    Aside($db);
+                    ContentBusqueda($db,1,$consulta);
+                    Footer();
+                }
             }
         }
-    }
 
-     if(isset($_POST['conciertos_searchbutton'])){
-        //Select
-        if(isset($_POST['conciertos_search'])){
-            $consulta = 'SELECT * FROM concierto WHERE ciudad = "'.$_POST['conciertos_search'].'"';
-            Encabezado(3);
-            Aside($db);
-            ContentBusqueda($db,2,$consulta);
-            Footer();
-        }else{
-            if(isset($_POST['fecha_iniciogira']) && isset($_POST['fecha_fingira'])){
-                $fecha_inicio = date("Y-m-d", strtotime($_POST['fecha_iniciogira']));
-                $fecha_fin = date("Y-m-d", strtotime($_POST['fecha_fingira']));
-                $consulta = 'SELECT * FROM concierto WHERE fecha >= "'.$fecha_inicio.'" and fecha <= "'.$fecha_fin.'"';
+        if(isset($_POST['conciertos_searchbutton'])){
+            //Select
+            if(isset($_POST['conciertos_search'])){
+                $consulta = 'SELECT * FROM concierto WHERE ciudad = "'.$_POST['conciertos_search'].'"';
                 Encabezado(3);
                 Aside($db);
                 ContentBusqueda($db,2,$consulta);
                 Footer();
+            }else{
+                if(isset($_POST['fecha_iniciogira']) && isset($_POST['fecha_fingira'])){
+                    $fecha_inicio = date("Y-m-d", strtotime($_POST['fecha_iniciogira']));
+                    $fecha_fin = date("Y-m-d", strtotime($_POST['fecha_fingira']));
+                    $consulta = 'SELECT * FROM concierto WHERE fecha >= "'.$fecha_inicio.'" and fecha <= "'.$fecha_fin.'"';
+                    Encabezado(3);
+                    Aside($db);
+                    ContentBusqueda($db,2,$consulta);
+                    Footer();
+                }
             }
         }
-    }   
+    }
+    
 ?>

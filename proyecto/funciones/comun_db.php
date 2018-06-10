@@ -2,6 +2,15 @@
 
     require_once("credenciales.php");
 
+    if ( $_SERVER['REQUEST_METHOD']=='GET' && realpath("comun_db.php") == realpath( $_SERVER['SCRIPT_FILENAME'] ) ) {
+        
+        header( 'HTTP/1.0 403 Forbidden', TRUE, 403 );
+        
+        $url = 'https://void.ugr.es/~ftm19971718/proyecto/index.php';
+        
+        die( header('Location: '.$url) );
+    }
+
     function ComprobarDatosVacios($post){
         $comprobar = false;
         
@@ -20,7 +29,7 @@
         if (!$called) {
             $foo_called = true;
             $db = mysqli_connect(DB_HOST,DB_USER,DB_PASSWD,DB_DATABASE);
-        
+            
             session_start();
 
             if(!$db){
@@ -35,27 +44,36 @@
     }
     
     function BD_CrearUsuario($db, $post){
-        $consulta = sprintf("SELECT id FROM usuarios_proyecto WHERE id = '%s';", mysqli_real_escape_string($db, $post["id"]));
-        $resultado = mysqli_fetch_assoc(mysqli_query($db,$consulta));
-        
+        if(isset($post['id'])){
+            $consulta = sprintf("SELECT id FROM usuarios_proyecto WHERE id = '%s';", mysqli_real_escape_string($db, $post["id"]));
+            $resultado = mysqli_fetch_assoc(mysqli_query($db,$consulta));  
+            
+            if(isset($post['editar_usuario']) && isset($post['aniadir'])){
+                unset($post['editar_usuario']);
+                unset($post['aniadir']);
+            }
 
-        if($resultado || ComprobarDatosVacios($post)){
-            return false;
+            if($resultado){
+                return false;
+            }else{
+                $consulta = sprintf("INSERT INTO usuarios_proyecto (id, password, nombre, apellido, email, tlf, tipo) VALUES ('%s','%s','%s','%s','%s',%d,%d);", 
+                                mysqli_real_escape_string($db, $post["id"]), 
+                                password_hash($post["password"], PASSWORD_DEFAULT),  
+                                mysqli_real_escape_string($db, $post["nombre"]),  
+                                mysqli_real_escape_string($db, $post["apellido"]),
+                                mysqli_real_escape_string($db, $post["email"]),
+                                mysqli_real_escape_string($db, $post["tlf"]),
+                                mysqli_real_escape_string($db, $post["tipo"]));
+            
+                $resultado = mysqli_query($db, $consulta);
+                return true;
+            }
         }else{
-            $consulta = sprintf("INSERT INTO usuarios_proyecto (id, password, nombre, apellido, email, tlf, tipo) VALUES ('%s','%s','%s','%s','%s',%d,%d);", 
-                            mysqli_real_escape_string($db, $post["id"]), 
-                            password_hash($post["password"], PASSWORD_DEFAULT),  
-                            mysqli_real_escape_string($db, $post["nombre"]),  
-                            mysqli_real_escape_string($db, $post["apellido"]),
-                            mysqli_real_escape_string($db, $post["email"]),
-                            mysqli_real_escape_string($db, $post["tlf"]),
-                            mysqli_real_escape_string($db, $post["tipo"]));
-        
-            $resultado = mysqli_query($db, $consulta);
-            return true;
+            return false;
         }
     }
 
+    // Cambiar
     function BD_ModificarUsuario($db, $post){
         $consulta = sprintf("SELECT nombre FROM usuarios WHERE nombre = '%s';", mysqli_real_escape_string($db, $post["nombre"]));
         $resultado = mysqli_fetch_assoc(mysqli_query($db,$consulta));
@@ -103,6 +121,7 @@
         }
     }
 
+    // Cambiar
     function BD_BorrarUsuario($db, $post){
         $consulta = sprintf("SELECT nombre FROM usuarios WHERE nombre = '%s';", mysqli_real_escape_string($db, $post["nombre"]));
         $resultado = mysqli_fetch_assoc(mysqli_query($db,$consulta));
@@ -116,20 +135,21 @@
         }
     }
 
+    
     function BD_ListarUsuarios($db){
-        $consulta = "SELECT * FROM usuarios;";
+        $consulta = "SELECT * FROM usuarios_proyecto;";
         $resultado = mysqli_query($db,$consulta);
 
         echo <<<HTML
             <table border = '1'>
-                <thead><tr><th> Usuario </th><th> Apellidos </th><th> E-mail </th><th> Tipo </th><tr></thead>
+                <thead><tr><th> Usuarios </th><th> Nombres </th><th> Apellidos </th><th> Email </th><th> Teléfono </th><th> Tipo </th><tr></thead>
                 <tbody>
 HTML;
             while($fila = mysqli_fetch_row($resultado)){
-                if($fila['4'] == 1)
-                    echo "<tr><td>", $fila['0'] ,"</td><td>", $fila['1'] ,"</td><td>", $fila['2'] ,"</td><td> usuario </td></tr>";
+                if($fila['6'] == 1)
+                    echo "<tr><td>", $fila['0'] ,"</td><td>", $fila['2'] ,"</td><td>", $fila['3'] ,"</td><td>", $fila['4'] ,"</td><td>", $fila['5'] ,"</td><td> Administrador </td></tr>";
                 else
-                    echo "<tr><td>", $fila['0'] ,"</td><td>", $fila['1'] ,"</td><td>", $fila['2'] ,"</td><td> administrador </td></tr>";
+                    echo "<tr><td>", $fila['0'] ,"</td><td>", $fila['2'] ,"</td><td>", $fila['3'] ,"</td><td>", $fila['4'] ,"</td><td>", $fila['5'] ,"</td><td> Gestor de compras </td></tr>";
             }
         echo <<<HTML
                 </tbody>
@@ -137,6 +157,165 @@ HTML;
 HTML;
     }
 
+    function BD_CrearComponente($db,$post){
+        if(isset($post['nombre'])){
+            $consulta = sprintf("SELECT nombre FROM componentes WHERE nombre = '%s';", mysqli_real_escape_string($db, $post['nombre']));
+            $resultado = mysqli_fetch_assoc(mysqli_query($db,$consulta));  
+            
+            if(isset($post['editar_componentes']) && isset($post['aniadir'])){
+                unset($post['editar_componentes']);
+                unset($post['aniadir']);
+            }
+
+            if($resultado){
+                return false;
+            }else{
+                $nombre = mysqli_real_escape_string($db, $post['nombre']);
+                $date = date("Y-m-d", strtotime(mysqli_real_escape_string($db, $_POST['fecha_nac'])));
+                $lugar = mysqli_real_escape_string($db, $post['lugar']);
+                $texto = htmlentities(mysqli_real_escape_string($db, $_POST['biografia']));
+                $image = $_FILES['imagen']['name'];
+
+                $path = "./imagenes/";
+                move_uploaded_file($_FILES['imagen']['tmp_name'],$path.$image);
+
+                $consulta = "INSERT INTO componentes(nombre, fecha_nac, lugar, foto, texto) VALUES ('$nombre', '$date', '$lugar', '$image', '$texto');";
+                $resultado = mysqli_query($db, $consulta);
+                
+                return true;
+            }
+        }else{
+            return false;
+        }
+    }
+    
+    function BD_ModificarComponente($db, $post){}
+    
+    function BD_BorrarComponente($db, $post){}
+
+    function BD_CrearBiografia($db,$post){
+        $posicion = "SELECT posicion FROM biografia ORDER BY posicion DESC LIMIT 1;";
+        $resultado = mysqli_fetch_row(mysqli_query($db,$posicion));  
+        $posicion = $resultado['0'];
+        $poscion = $posicion++;
+
+        if(isset($post['editar_biografia']) && isset($post['aniadir'])){
+                unset($post['editar_biografia']);
+                unset($post['aniadir']);
+        }
+
+        if(!isset($post['titulo']) || !isset($post['biografia'])){
+            return false;
+        }else{
+            if(!empty($post['titulo']) && !empty($post['biografia'])){
+                $titulo = mysqli_real_escape_string($db, $post['titulo']);
+                $texto = htmlentities(mysqli_real_escape_string($db, $_POST['biografia']));
+                $texto = "<p>".$texto."</p>";
+                $image = $_FILES['imagen']['name'];
+
+                $path = "./imagenes/";
+                move_uploaded_file($_FILES['imagen']['tmp_name'],$path.$image);
+
+                $consulta = "INSERT INTO biografia (posicion, titulo, imagen, texto) VALUES ('$posicion', '$titulo', '$image', '$texto');";
+
+                $resultado = mysqli_query($db, $consulta);
+                    
+                return true;
+            }else{
+                return false;
+            }
+        }
+    }
+
+    function BD_ModificarBiografia($db, $post){}
+
+    function BD_BorrarBiografia($db, $post){}
+       
+    function BD_CrearDisco($db,$post){
+        if(isset($post['fecha'])){
+            $fecha = date("Y-m-d", strtotime(mysqli_real_escape_string($db, $post['fecha'])));
+            $consulta = "SELECT fecha FROM album WHERE fecha = '$fecha';";
+            $resultado = mysqli_fetch_assoc(mysqli_query($db,$consulta));  
+            
+            if(isset($post['editar_discografia']) && isset($post['aniadir']) && isset($post['enviar'])){
+                unset($post['editar_componentes']);
+                unset($post['aniadir']);
+                unset($post['enviar']);
+            }
+
+            if($resultado){
+                return false;
+            }else{
+                $nombre = str_replace(' ', '_', mysqli_real_escape_string($db, $post['nombre']));
+                $disco = mysqli_real_escape_string($db, $post['discografia']);
+                $formato = mysqli_real_escape_string($db, $post['formato']);
+                $precio = mysqli_real_escape_string($db, $post['precio']);
+                $image = $_FILES['imagen']['name'];
+
+                $path = "./imagenes/";
+                move_uploaded_file($_FILES['imagen']['tmp_name'],$path.$image);
+
+                $consulta = "INSERT INTO album(nombre, fecha, discografica, formato, precio, imagen) VALUES ('$nombre','$fecha','$disco','$formato','$precio','$image');";
+                $resultado = mysqli_query($db, $consulta);
+                
+                for($i = 1; $i <= $_COOKIE['numerocanciones']; $i++){
+                    $nombrecancion = mysqli_real_escape_string($db, $post['nombrecancion'.$i]);
+                    $nombrecancion = "«".$nombrecancion."»";
+                    $duracion = mysqli_real_escape_string($db, $post['duracion'.$i]);
+                    $consulta= "INSERT INTO canciones(posicion, nombre, nombre_album, duracion) VALUES ('$i','$nombrecancion','$nombre','$duracion');";
+                    $resultado = mysqli_query($db, $consulta);
+                }
+
+                return true;
+            }
+        }else{
+            return false;
+        }
+    }
+
+    function BD_ModificarDisco($db, $post){}
+      
+    function BD_BorrarDisco($db, $post){}
+
+    function BD_CrearConcierto($db,$post){
+        if(isset($post['fecha'])){
+            $fecha = date("Y-m-d", strtotime(mysqli_real_escape_string($db, $post['fecha'])));
+            $consulta = 'SELECT fecha FROM concierto WHERE fecha ="'.$fecha.'";';
+            $resultado = mysqli_fetch_assoc(mysqli_query($db,$consulta));  
+            
+            if(isset($post['editar_concierto']) && isset($post['aniadir'])){
+                unset($post['editar_concierto']);
+                unset($post['aniadir']);
+            }
+
+            if($resultado){
+                return false;
+            }else{
+                $pais = mysqli_real_escape_string($db, $post['pais']);
+                $ciudad = mysqli_real_escape_string($db, $post['ciudad']);
+                $lugar = mysqli_real_escape_string($db, $post['lugar']);
+                $nombre = mysqli_real_escape_string($db, $post['nombre']);
+                $texto = htmlentities(mysqli_real_escape_string($db, $_POST['texto']));
+
+                $consulta = "INSERT INTO concierto(fecha, pais, ciudad, lugar, nombre, textodescriptivo) VALUES ('$fecha','$pais','$ciudad','$lugar','$nombre','$texto')";
+                $resultado = mysqli_query($db, $consulta);
+                
+                return true;
+            }
+        }else{
+            return false;
+        }
+    }
+
+    function BD_ModificarConcierto($db, $post){}
+      
+    function BD_BorrarConcierto($db, $post){}
+
+    function BD_ListarPedidos(){
+
+    }
+
+    
     function BD_ListarConciertos($db,$consulta){
         $resultado = mysqli_query($db,$consulta);
 
@@ -170,7 +349,7 @@ HTML;
 
         echo '<ul class="image_album">';
         while($fila = mysqli_fetch_row($resultado)){
-            echo '<li><a href=index.php?disco=', $fila['0'], '>', '<img src="data:image/jpeg;base64,'.base64_encode( $fila['5'] ).'"/></a></li>';
+            echo '<li><a href=index.php?disco=', $fila['0'], '>', '<img src="./imagenes/'.$fila['5'].'"/></a></li>';
         }
         echo "</ul>";
     }
@@ -189,7 +368,7 @@ HTML;
                 <span><table>
                     <tr>
 HTML;
-                echo '<td rowspan="4">', '<img src="data:image/jpeg;base64,'.base64_encode( $fila['5'] ).'"/></td>
+                echo '<td rowspan="4">', '<img src="./imagenes/'.$fila['5'].'"/></td>
                         <td>'.$fila['4'].'</td>
                     </tr>
                     <tr>
@@ -232,12 +411,14 @@ HTML;
         session_unset();
         $param = session_get_cookie_params();
 
+        unset($_COOKIE["logged-in"]);
+        setcookie("logged-in",false);
+        
         setcookie(session_name(), $_COOKIE[session_name()], time() - 100000, 
         $param['path'], $param['domain'], $param['secure'], $param['httponly']);
         session_destroy();
 
-        $url = "https://void.ugr.es/~ftm19971718/p4/4.4/index.php";
+        $url = "https://void.ugr.es/~ftm19971718/proyecto/index.php";
         header('Location: '.$url);
     }
-
 ?>

@@ -6,21 +6,23 @@
 
     function ValidarUsuario($db,$post){
         if(isset($post['id']) && isset($post['password'])){
-            $consulta = sprintf("SELECT password FROM usuarios_proyecto WHERE id = '%s';", mysqli_real_escape_string($db, $_POST['id']));
+            $consulta = sprintf("SELECT * FROM usuarios_proyecto WHERE id = '%s';", mysqli_real_escape_string($db, $_POST['id']));
             $resultado = mysqli_fetch_assoc(mysqli_query($db, $consulta));
                 
             if(password_verify($post['password'], $resultado['password'])){
-                $_SESSION['id'] = $post['id'];
-                $_SESSION['password'] = $post['password'];
+                $_SESSION['id'] = $resultado['id'];
+                $_SESSION['tipo'] = $resultado['tipo'];
+                setcookie("logged-in",true);
                 return true;
             }else
+                setcookie("logged-in",false);
                 return false;
         }
     }
 
     function ContentLogin($db,$post){
         if(ValidarUsuario($db,$post)){
-            $url = 'https://void.ugr.es/~ftm19971718/proyecto/index.php?logged=';
+            $url = 'https://void.ugr.es/~ftm19971718/proyecto/index.php';
             header('Location: '.$url);
         }else{
             echo <<<HTML
@@ -48,5 +50,8 @@ HTML;
         Aside($db);
         ContentLogin($db,$_POST);
         Footer();
+    }else{
+        $url = 'https://void.ugr.es/~ftm19971718/proyecto/index.php';
+        header('Location: '.$url);
     }
 ?>

@@ -2,7 +2,16 @@
 
     require "comun_db.php";
 
-     function select_fechatarjeta(){
+    if ( $_SERVER['REQUEST_METHOD']=='GET' && realpath("comun_html.php") == realpath( $_SERVER['SCRIPT_FILENAME'] ) ) {
+        
+        header( 'HTTP/1.0 403 Forbidden', TRUE, 403 );
+        
+        $url = 'https://void.ugr.es/~ftm19971718/proyecto/index.php';
+        
+        die( header('Location: '.$url) );
+    }
+
+    function select_fechatarjeta(){
         echo <<<HTML
                     <span><label>Fecha de caducidad y código de seguridad: 
 HTML;
@@ -29,57 +38,24 @@ HTML;
     }
 
     // Encabezado de los HTMLs
-    function Encabezado($value, $logged){
-        if(!$logged){
-            $items1 = ["Home", "Biografía", "Discografía", "Conciertos", "Register", "Login"];
-            $links1 = ["index.php?id=0", "index.php?id=1", "index.php?id=2", "index.php?id=3", "index.php?id=4", "index.php?id=5"];
-            
-            echo <<<HTML
-                        <!DOCTYPE html>
-                        <!-- Ejemplo de página web -->
-                        <html lang="es">   
-                            <head>
-HTML;
-                                //Selecciono el titulo
-                                echo "<title>Daft Punk | ".$items1[$value]."</title>";
-echo <<< HTML
-                                <meta charset="utf-8">
-                                <meta name="author" content="Fernando Talavera Mendoza">
-                                <meta name="keywords" content="tecnologías web, html, programación">
-                                <link rel="shortcut icon" href="./img/favicon.png" type="image/png">
-                                <link rel="stylesheet" href="./style.css">
-                            </head>
-                            
-                            <body class="grid">
-                                <header class="header-grid">
-                                    <img src="./img/logo-image-file.png" alt="Logo Imagen"/>
-                                </header>
-                                <nav class="nav-grid">
-                                    <ul>
-HTML;
-                        // Genero el nav y activo el <a>
-                        foreach ($items1 as $k => $v){
-                            if($k == 4 || $k == 5)
-                                echo '<li id="right"'.($k==$value?" class='active'":"").">"."<a href='".$links1[$k]."'>".$v."</a></li>";
-                            else
-                                echo "<li".($k==$value?" class='active'":"").">"."<a href='".$links1[$k]."'>".$v."</a></li>";
-                        }
-        echo <<<HTML
-                                    </ul>
-                                </nav>
-HTML;
+    function Encabezado($value){
+        if(!isset($_COOKIE['logged-in'])){
+            $items = ["Home", "Biografía", "Discografía", "Conciertos", "Register", "Login"];
+            $links = ["index.php?id=0", "index.php?id=1", "index.php?id=2", "index.php?id=3", "index.php?id=4", "index.php?id=5"];
         }else{
-            $item2 = ["Home", "Biografía", "Discografía", "Conciertos", $_SESSION['id']];
-            $links2 = ["index.php?id=0", "index.php?id=1", "index.php?id=2", "index.php?id=3", 'index.php?user="'.$_SESSION['id'].'"'];
-            
-            echo <<<HTML
+            if($_COOKIE['logged-in']){
+                $items = ["Home", "Biografía", "Discografía", "Conciertos", "Logout", $_SESSION['id']];
+                $links = ["index.php?id=0", "index.php?id=1", "index.php?id=2", "index.php?id=3","index.php?id=logout", "index.php?id=5"];
+            }
+        }
+        echo <<<HTML
                         <!DOCTYPE html>
                         <!-- Ejemplo de página web -->
                         <html lang="es">   
                             <head>
 HTML;
                                 //Selecciono el titulo
-                                echo "<title>Daft Punk | ".$items2[$value]."</title>";
+                                echo "<title>Daft Punk | ".$items[$value]."</title>";
 echo <<< HTML
                                 <meta charset="utf-8">
                                 <meta name="author" content="Fernando Talavera Mendoza">
@@ -96,27 +72,37 @@ echo <<< HTML
                                     <ul>
 HTML;
                         // Genero el nav y activo el <a>
-                        foreach ($items2 as $k => $v){
+                        foreach ($items as $k => $v){
                             if($k == 4 || $k == 5)
-                                echo '<li id="right"'.($k==$value?" class='active'":"").">"."<a href='".$links2[$k]."'>".$v."</a></li>";
+                                echo '<li id="right"'.($k==$value?" class='active'":"").">"."<a href='".$links[$k]."'>".$v."</a></li>";
                             else
-                                echo "<li".($k==$value?" class='active'":"").">"."<a href='".$links2[$k]."'>".$v."</a></li>";
+                                echo "<li".($k==$value?" class='active'":"").">"."<a href='".$links[$k]."'>".$v."</a></li>";
                         }
         echo <<<HTML
                                     </ul>
                                 </nav>
 HTML;
-        }
-        
     }
 
     // Aside 
-    function Aside($db, $admin){
+    function Aside($db){
         $consulta = "SELECT DISTINCT ciudad FROM concierto;";
         $resultado = mysqli_query($db,$consulta);
 
         echo <<<HTML
             <aside class="aside-grid">
+HTML;
+            if(isset($_SESSION['tipo']) && $_SESSION['tipo'] == 1){
+            echo <<<HTML
+                <form action="editar.php" method="POST">
+                    <span><input type="submit" name="editar_componentes" value="Componentes"/></span>
+                    <span><input type="submit" name="editar_biografia" value="Biografía"/></span>
+                    <span><input type="submit" name="editar_discografia" value="Discografía"/></span>
+                    <span><input type="submit" name="editar_concierto" value="Conciertos"/></span>
+                </form>
+HTML;
+        }
+        echo <<<HTML
                 <span><form action="busqueda.php" method="POST">
                     <span><label>Buscar un disco o una canción <input type="text" name="search" placeholder="Buscar..."/></label></span>
                     <span><label> Introducir dos fechas: <input type="text" name="fecha_iniciocancion" placeholder="Fecha de inicio"/> <input type="text" name="fecha_fincancion" placeholder="Fecha de final"/></label></span> 
@@ -137,10 +123,6 @@ HTML;
                 </form></span>
             </aside>
 HTML;
-        /*  
-            Edicion del archivo
-            Gestor de compras
-        */
     }
 
     // El contenido del main de cada página
@@ -210,7 +192,7 @@ HTML;
                             while($fila = mysqli_fetch_row($resultado)){
                                 $fecha = date("Y-m-d", strtotime($fila['1']));
                                 echo '<span><section class="componentefoto">';
-                                echo '<img src="data:image/jpeg;base64,'.base64_encode( $fila['3'] ).'"/></section></span>';
+                                echo '<img src="./imagenes/'.$fila['3'].'"/></section></span>';
                                 echo '<span><h1>'.$fila['0']."</h1></span>";
                                 echo "<span><p>".$fecha."  ".$fila['2']."</p></span>";
                                 echo "<span><p>".$fila['4']."</p></span>";
@@ -237,7 +219,7 @@ HTML;
                                 echo "<span><section><h1>".$fila['1']."</h1>";
                                 echo "<span>".$fila['3']."</span>";
                                 if(!is_null($fila['2']))
-                                    echo '<span><img id="main" src="data:image/jpeg;base64,'.base64_encode( $fila['2'] ).'"/></span>';
+                                    echo '<span><img id="main" src="./imagenes/'.$fila['2'].'"/></span>';
                                 echo "</section></span>";
                             }
             echo <<<HTML
@@ -328,7 +310,40 @@ HTML;
 
             // Login
             case 5:
-                echo <<<HTML
+                if(isset($_SESSION['id']) && isset($_SESSION['tipo']) && $_SESSION['tipo'] == 1){
+                    echo <<<HTML
+                        <main class="main-grid">
+                                <article>
+HTML;
+                                    echo "<h1>".$_SESSION['id']."</h1>";
+                    echo<<<HTML
+                                    <form action="editar.php" method="POST">
+                                        <span><input type="submit" name="editar_usuario" value="Editar usuario"/></span>
+                                    </form>
+
+                                    <form action="visualizar.php" method="POST">
+                                        <span><input type="submit" name="visualizar" value="Visualizar eventos"/></span>
+                                    </form>
+HTML;
+                                    BD_ListarUsuarios($db);
+                    echo <<<HTML
+                                </article>
+                            </main>
+HTML;
+                }else if(isset($_SESSION['id']) && isset($_SESSION['tipo']) && $_SESSION['tipo'] == 2){
+                    echo <<<HTML
+                        <main class="main-grid">
+                                    <article>
+HTML;
+                                        echo "<h1>".$_SESSION['id']."</h1>";
+                                        BD_ListarPedidos($db);
+
+                        echo <<<HTML
+                                    </article>
+                                </main>
+HTML;
+                }else{
+                    echo <<<HTML
                     <main class="main-grid">
                         <article>
                             <h1>Login</h1>
@@ -342,6 +357,7 @@ HTML;
                         </article>
                     </main>
 HTML;
+                }
             break;
         }
     }

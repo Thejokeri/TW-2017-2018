@@ -43,6 +43,19 @@
         }
     }
     
+    function BD_MostrarMod($db,$consulta){
+        $resultado = mysqli_query($db,$consulta);
+        $p = true;
+        while($fila = mysqli_fetch_row($resultado)){
+            $contenido = str_replace('_', ' ', $fila['0']);
+        if($p){
+            echo '<span><label><input type="radio" name="seleccionado" value="', $fila['0'], '" checked/> ', $contenido ," </label></span>";
+            $p = false;
+        }else
+            echo '<span><label><input type="radio" name="seleccionado" value="', $fila['0'], '"/> ', $contenido ," </label></span>";
+        }
+    }
+
     function BD_CrearUsuario($db, $post){
         if(isset($post['id'])){
             $consulta = sprintf("SELECT id FROM usuarios_proyecto WHERE id = '%s';", mysqli_real_escape_string($db, $post["id"]));
@@ -73,51 +86,35 @@
         }
     }
 
-    // Cambiar
     function BD_ModificarUsuario($db, $post){
-        $consulta = sprintf("SELECT nombre FROM usuarios WHERE nombre = '%s';", mysqli_real_escape_string($db, $post["nombre"]));
-        $resultado = mysqli_fetch_assoc(mysqli_query($db,$consulta));
-        
-        if($resultado['nombre'] == $post['nombre'] && !empty($post['nombre'])){
-            ModificarUsuario($db,true);
+        if(isset($post['id'])){
+            if($post['id'] == $_COOKIE['id']){
+                $consulta = sprintf("SELECT * FROM usuarios_proyecto WHERE id = '%s';", mysqli_real_escape_string($db, $_COOKIE['id']));
+                $resultado = mysqli_fetch_assoc(mysqli_query($db,$consulta));
+
+                if(empty($post['password']))
+                    $passwd = $resultado['password'];
+                else
+                    $passwd = password_hash($post['password'], PASSWORD_DEFAULT);
+
+                $id = mysqli_real_escape_string($db, $post['id']);  
+                $nombre = mysqli_real_escape_string($db, $post['nombre']);
+                $apellido = mysqli_real_escape_string($db, $post['apellido']);
+                $email = mysqli_real_escape_string($db, $post['email']);
+                $tlf = mysqli_real_escape_string($db, $post['tlf']);
+                $tipo = mysqli_real_escape_string($db, $post['tipo']);
+
+                $seleccionado = $_COOKIE['id'];
+
+                $consulta = "UPDATE usuarios_proyecto SET id = '$id', password= '$passwd', nombre = '$nombre', apellido = '$apellido', email = '$email', tlf = '$tlf', tipo = '$tipo' WHERE id = '$seleccionado';";
+                $resultado = mysqli_query($db, $consulta);
+
+                return true;
+            }else{
+                return false;
+            }
         }else{
-            $consulta = sprintf("SELECT * FROM usuarios WHERE nombre = '%s';", mysqli_real_escape_string($db, $post["seleccionado"]));
-            $resultado = mysqli_fetch_assoc(mysqli_query($db,$consulta));
-            if(empty($post['nombre']))
-                $nombre = $resultado['nombre'];
-            else
-                $nombre = $post['nombre'];
-             
-            if(empty($post['apellido']))
-                $apellido = $resultado['apellido'];
-            else
-                $apellido = $post['apellido'];
-
-            if(empty($post['email']))
-                $email = $resultado['email'];
-            else
-                $email = $post['email'];
-
-            if(empty($post['passwd']))
-                $passwd = $resultado['passwd'];
-            else
-                $passwd = password_hash($post['passwd'], PASSWORD_DEFAULT);
-
-            if(empty($post['tipo']))
-                $tipo = $resultado['tipo'];
-            else
-                $tipo = $post['tipo'];
-
-            $consulta = sprintf("UPDATE usuarios SET nombre='%s', apellido='%s', email='%s', passwd='%s', tipo=%d WHERE nombre = '%s';", 
-                                mysqli_real_escape_string($db, $nombre),   
-                                mysqli_real_escape_string($db, $apellido),  
-                                mysqli_real_escape_string($db, $email),  
-                                $passwd,  
-                                mysqli_real_escape_string($db, $tipo), 
-                                $post["seleccionado"]);
-                                
-            $resultado = mysqli_query($db, $consulta);
-            mensaje_correcto(2);
+            return false;
         }
     }
 
@@ -189,7 +186,43 @@ HTML;
         }
     }
     
-    function BD_ModificarComponente($db, $post){}
+    function BD_ModificarComponente($db, $post){
+        if(isset($post['nombre'])){
+            if($post['nombre'] == $_COOKIE['nombre']){
+                $consulta = sprintf("SELECT * FROM componentes WHERE nombre = '%s';", mysqli_real_escape_string($db, $_COOKIE['nombre']));
+                $resultado = mysqli_fetch_assoc(mysqli_query($db,$consulta));
+
+                $nombre = mysqli_real_escape_string($db, $post['nombre']);
+                $date = date("Y-m-d", strtotime(mysqli_real_escape_string($db, $_POST['fecha_nac'])));
+                $lugar = mysqli_real_escape_string($db, $post['lugar']);
+
+                if(empty($post['biografia']))
+                    $texto = $resultado['texto'];
+                else
+                    $texto = htmlentities(mysqli_real_escape_string($db, $_POST['biografia']));
+
+                $image = $_FILES['imagen']['name'];
+
+                $path = "./imagenes/";
+
+                if($image != $resultado['foto'] && $image != '' && !empty($resultado['foto'])){
+                    unlink($path.$resultado['foto']);
+                    move_uploaded_file($_FILES['imagen']['tmp_name'],$path.$image);
+                }else{
+                    $imagen = $resultado['foto'];
+                }
+                    
+                $consulta = "UPDATE componentes SET nombre = '$nombre', fecha_nac = '$date', lugar = '$lugar', foto = '$image', texto = '$texto' WHERE nombre = '$nombre';";
+                $resultado = mysqli_query($db, $consulta);
+
+                return true;
+            }else{
+                return false;
+            }
+        }else{
+            return false;
+        }
+    }
     
     function BD_BorrarComponente($db, $post){}
 
@@ -217,7 +250,6 @@ HTML;
                 move_uploaded_file($_FILES['imagen']['tmp_name'],$path.$image);
 
                 $consulta = "INSERT INTO biografia (posicion, titulo, imagen, texto) VALUES ('$posicion', '$titulo', '$image', '$texto');";
-
                 $resultado = mysqli_query($db, $consulta);
                     
                 return true;
@@ -227,7 +259,42 @@ HTML;
         }
     }
 
-    function BD_ModificarBiografia($db, $post){}
+    function BD_ModificarBiografia($db, $post){
+        if(isset($post['titulo'])){
+            if($post['titulo'] == $_COOKIE['titulo']){
+                $consulta = sprintf("SELECT * FROM biografia WHERE titulo = '%s';", mysqli_real_escape_string($db, $_COOKIE['titulo']));
+                $resultado = mysqli_fetch_assoc(mysqli_query($db,$consulta));
+
+                $posicion = $resultado['posicion'];
+                $titulo = mysqli_real_escape_string($db, $post['titulo']);
+
+                if(empty($post['biografia']))
+                    $texto = $resultado['texto'];
+                else
+                    $texto = "<p>".htmlentities(mysqli_real_escape_string($db, $_POST['biografia']))."</p>";
+
+                $image = $_FILES['imagen']['name'];
+
+                $path = "./imagenes/";
+
+                if($image != $resultado['imagen'] && $image != '' && !empty($resultado['imagen'])){
+                    unlink($path.$resultado['imagen']);
+                    move_uploaded_file($_FILES['imagen']['tmp_name'],$path.$image);
+                }else{
+                    $imagen = $resultado['imagen'];
+                }
+                    
+                $consulta = "UPDATE  biografia  SET  posicion = '$posicion', titulo = '$titulo', imagen = '$image', texto = '$texto' WHERE titulo = '$titulo'";
+                $resultado = mysqli_query($db, $consulta);
+
+                return true;
+            }else{
+                return false;
+            }
+        }else{
+            return false;
+        }
+    }
 
     function BD_BorrarBiografia($db, $post){}
        
@@ -273,7 +340,48 @@ HTML;
         }
     }
 
-    function BD_ModificarDisco($db, $post){}
+    function BD_ModificarDisco($db, $post){
+        if(isset($post['album'])){
+            if($post['album'] == $_COOKIE['album']){
+                $consulta = sprintf("SELECT * FROM album WHERE nombre= '%s';", mysqli_real_escape_string($db, $_COOKIE['album']));
+                $resultado = mysqli_fetch_assoc(mysqli_query($db,$consulta));
+
+                $album = mysqli_real_escape_string($db, $post['album']);
+                $fecha = date("Y-m-d", strtotime(mysqli_real_escape_string($db, $post['fecha'])));
+                $disco = mysqli_real_escape_string($db, $post['discografia']);
+                $formato = mysqli_real_escape_string($db, $post['formato']);
+                $precio = mysqli_real_escape_string($db, $post['precio']); 
+
+                $image = $_FILES['imagen']['name'];
+
+                $path = "./imagenes/";
+
+                if($image != $resultado['imagen'] && $image != '' && !empty($resultado['imagen'])){
+                    unlink($path.$resultado['imagen']);
+                    move_uploaded_file($_FILES['imagen']['tmp_name'],$path.$image);
+                }else{
+                    $imagen = $resultado['imagen'];
+                }
+                    
+                $consulta = "UPDATE  album  SET  nombre = '$album', fecha = '$fecha', discografica = '$disco', formato = '$formato', precio = '$precio', imagen = '$imagen' WHERE nombre = '$album'";
+                $resultado = mysqli_query($db, $consulta);
+
+                for($i = 1; $i <= $_POST['fila']; $i++){
+                    $nombrecancion = mysqli_real_escape_string($db, $post['nombrecancion'.$i]);
+                    $nombrecancion = "«".$nombrecancion."»";
+                    $duracion = mysqli_real_escape_string($db, $post['duracion'.$i]);
+                    $consulta= "UPDATE   canciones   SET   posicion  = '$i',  nombre  = '$nombrecancion',  nombre_album  = '$album',  duracion  = '$duracion' WHERE posicion = '$i";
+                    $resultado = mysqli_query($db, $consulta);
+                }
+
+                return true;
+            }else{
+                return false;
+            }
+        }else{
+            return false;
+        }
+    }
       
     function BD_BorrarDisco($db, $post){}
 
@@ -307,7 +415,34 @@ HTML;
         }
     }
 
-    function BD_ModificarConcierto($db, $post){}
+    function BD_ModificarConcierto($db, $post){
+        if(isset($post['fecha'])){
+            if($post['fecha'] == $_COOKIE['fecha']){
+                $consulta = sprintf("SELECT * FROM concierto WHERE fecha = '%s';", mysqli_real_escape_string($db, $_COOKIE['fecha']));
+                $resultado = mysqli_fetch_assoc(mysqli_query($db,$consulta));
+
+                $fecha = date("Y-m-d", strtotime(mysqli_real_escape_string($db, $post['fecha'])));
+                $pais = mysqli_real_escape_string($db, $post['pais']);
+                $ciudad = mysqli_real_escape_string($db, $post['ciudad']);
+                $lugar = mysqli_real_escape_string($db, $post['lugar']);
+                $nombre = mysqli_real_escape_string($db, $post['nombre']);
+
+                if(empty($post['texto']))
+                    $texto = $resultado['texto'];
+                else
+                    $texto = htmlentities(mysqli_real_escape_string($db, $_POST['texto']));
+
+                $consulta = "UPDATE  concierto  SET  fecha = '$fecha', pais = '$pais', ciudad = '$ciudad', lugar = '$lugar', nombre = '$nombre', textodescriptivo = '$texto' WHERE fecha = '$fecha'";
+                $resultado = mysqli_query($db, $consulta);
+
+                return true;
+            }else{
+                return false;
+            }
+        }else{
+            return false;
+        }
+    }
       
     function BD_BorrarConcierto($db, $post){}
 
